@@ -1,0 +1,74 @@
+#	All scene objects have a name and parameters.
+#		Each parameter is separated by "|" characters.
+#
+#	There should be no whitespaces between the beginning of the name
+#		and the end of its last parameter.
+#
+#	In order to comment out a line, you need to put a "#" character at the
+#		beginning(not counting whitespace characters), as you might guess.
+#
+#	To the scene you can put objects like these:
+#		Camera:
+#			camera (there should be only one on the scene)
+#		Shapes:
+#			plane
+#			sphere
+#			cone
+#			cylinder
+#		Lights:
+#			ambient (there should be only one or zero on the scene)
+#			point
+#
+#	Objects names are case-INsensitive.
+#
+#	For one line - one object.
+#
+#	All other non-empty strings throw an "Unknown string" exception.
+#
+#	If the scene has no light, an error exception about it will be thrown.
+#
+#	Numbers:	Maximum number length (counting by characters): 9
+#				You can write a double number, both 0.1 and .1
+#		Examples: 100, 0.1, .01 and -10 have the same length.
+#
+#	Vectors:	Vectors have three numbers separated by commas without spaces.
+#		Examples: 0,0,0 or -1.4,4563,.4
+#
+#	Colors:		Colors have a HEX format(case-insenitive):
+#
+#	Length:| 	  Three ways			 Two ways				  One way
+#	-------| ___________________	___________________		___________________
+#	Six    | |0x| ff | ff | ff |	|0x| ff | 88 | aa |		|0x| f7 | 64 | 3d |
+#	-------| |=================|	|=================|		|=================|
+#	Three  | |0x| f  | f  | f  |	|0x| f  | 8  | a  |
+#	-------| |=================|	|=================|
+#	One    | |0x|      f       |
+#
+#	For the scene below, the parameter names are provided
+#
+#	The intensity value(double) is in the range (0...100]
+#	The specular value(int) is in the range [0...1000]
+
+#camera|position|target|
+camera|0,1,-20|0,0,0|
+
+#ambient|intensity
+ambient|10|
+
+#point|target|instensity|
+point|9,5,2|50|
+point|9,-5,2|50|
+
+#plane|position|normal|specular|color|
+plane|0,0,0|0,1,0|0|00ff00|
+
+#sphere|center|radius|specular|color|
+sphere|0,0,10|2|100|ff0000|
+sphere|-5,0,15|2|100|ff0000|
+
+
+#cylinder|position|direction|radius|specular|color|
+cylinder|0,0,0|0,1,0|3|1000|ff0|
+
+#cone|position|direction|angle|specular|color|
+cone|0,0,0|0,1,0|30|100|0ff|

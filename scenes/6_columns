@@ -1,0 +1,36 @@
+camera|0,9,-70|0,1,-25|
+ambient|10|
+
+point|15,8,-38|40|
+point|-15,8,-38|40|
+point|0,8,-25|40|
+
+#flor
+plane|0,-3,0|0,1,0|0|909090|
+#upflor
+plane|0,18,0|0,1,0|0|808080|
+#back
+plane|0,0,40|0,0,1|0|0000f0|
+
+sphere|0,1,-25|3|100|ff0000|
+
+#left front col
+sphere|15,18,-30|5|100|f|
+cylinder|15,0,-30|0,1,0|3|100|ffffff|
+sphere|15,-3,-30|5|100|f|
+
+#right front col
+sphere|-15,18,-30|5|100|f|
+cylinder|-15,0,-30|0,1,0|3|100|ffffff|
+sphere|-15,-3,-30|5|100|f|
+
+#right back col
+sphere|-15,18,30|5|100|f|
+cylinder|-15,0,30|0,1,0|3|100|ffffff|
+sphere|-15,-3,30|5|100|f|
+
+#left back col
+sphere|15,18,30|5|100|f|
+cylinder|15,0,30|0,1,0|3|100|ffffff|
+sphere|15,-3,30|5|100|f|
+
