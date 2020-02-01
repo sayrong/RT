@@ -170,6 +170,7 @@ typedef struct			s_rt
 	_Bool				cam_flg;
 	_Bool				amb_flg;
 	_Bool				play;
+	_Bool				is_anti_alias;
 }						t_rt;
 
 typedef struct			s_thread
@@ -261,5 +262,8 @@ void					draw(t_rt *rt);
 
 int						red_x_button(void *param);
 int						deal_key(int key, void *param);
+
+t_color       			color_add(t_color c1, t_color c2);
+int						anti_aliasing(t_inter *inter, int *xy, t_thread *src, double incrementer);
 
 #endif

@@ -51,6 +51,7 @@ static void	rt_init(t_rt *rt, int part)
 		rt->lights = NULL;
 		rt->shapes = NULL;
 		rt->play = FALSE;
+		rt->is_anti_alias = TRUE;
 	}
 	else if (part == 2)
 	{

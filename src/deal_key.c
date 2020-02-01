@@ -69,6 +69,8 @@ int				deal_key(int key, void *param)
 		rotate_cam(&rt->cam, key);
 	else if (key == P_KEY)
 		rt->play ^= TRUE;
+	else if (key == M_KEY)
+		rt->is_anti_alias = !rt->is_anti_alias;
 	draw(rt);
 	return (0);
 }

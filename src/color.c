@@ -43,3 +43,13 @@ t_color	*get_color_from_list(t_list_shape *list)
 		return (&(((t_cylinder*)list->content)->color));
 	return (NULL);
 }
+
+t_color        color_add(t_color c1, t_color c2)
+{
+	t_color color;
+	
+	color.r = c1.r + c2.r;
+	color.g = c1.g + c2.g;
+	color.b = c1.b + c2.b;
+	return (color);
+}

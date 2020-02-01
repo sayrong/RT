@@ -12,100 +12,6 @@
 
 #include "rt.h"
 
-# define BLACK (t_color){0, 0, 0}
-
-
-t_color        color_scale(t_color color, double factor)
-{
-    t_color res;
-    
-    res.r = color.r * factor;
-    res.g = color.g * factor;
-    res.b = color.b * factor;
-    return (res);
-}
-
-t_color        color_add(t_color c1, t_color c2)
-{
-    t_color color;
-    
-    color.r = c1.r + c2.r;
-    color.g = c1.g + c2.g;
-    color.b = c1.b + c2.b;
-    return (color);
-}
-
-t_color            set_light(t_color *c, double light)
-{
-    t_color color;
-    
-    color.r = c->r * light;
-    color.g = c->g * light;
-    color.b = c->b * light;
-    return color;
-}
-
-int        get_color_simple(t_color *c)
-{
-    int    new_red;
-    int    new_green;
-    int    new_blue;
-    
-    new_red = c->r;
-    new_green = c->g;
-    new_blue = c->b;
-    return (new_red << 16 | new_green << 8 | new_blue);
-}
-
-void init_alias(int *hit, t_color *res, double *light)
-{
-    *hit = 0;
-    *res = BLACK;
-    *light = 0;
-}
-
-t_color anti_alias(t_inter *inter, int x, int y, t_thread *src)
-{
-    double    x_y[2];
-    t_color    res_tmp[2];
-    t_vec2    screen_coord;
-    double light_percent;
-    int hit;
-    
-    x_y[0] = x;
-    x_y[1] = y;
-    init_alias(&hit,&(res_tmp[0]), &light_percent);
-    while (x_y[0] < x + 1)
-    {
-        x_y[1] = y;
-        while (x_y[1] < y + 1)
-        {
-            inter->t = RAY_T_MAX;
-            screen_coord = v2_set((2.0 * x_y[0]) / WIDTH - 1.0,
-                                  (-2.0 * x_y[1]) / HEIGHT + 1.0);
-            set_ray_direction(inter->ray, &screen_coord, &src->rt->cam);
-            if (shapeset_intersect(inter, src->rt->shapes))
-            {
-                light_percent += compute_light(inter, src->rt->shapes, src->rt->lights);
-                hit++;
-                res_tmp[1] = *(get_color_from_list(inter->shape));
-                //n_col = set_light(&n_col,light_percent);
-                res_tmp[1] = color_scale(res_tmp[1],0.25);
-                res_tmp[0] = color_add(res_tmp[0], res_tmp[1]);
-            }
-            x_y[1] += 0.5;
-        }
-        x_y[0] += 0.5;
-    }
-    light_percent = light_percent / hit;
-    return (set_light(&res_tmp[0], light_percent));
-    //return (color);
-}
-
-
-
-
-
 t_vec3	get_normal(t_inter *inter)
 {
 	t_vec3	hit_point;
@@ -157,34 +63,18 @@ void	draw(t_rt *rt)
 	mlx_put_image_to_window(rt->mlx_ptr, rt->win_ptr, rt->img->img_ptr, 0, 0);
 }
 
+
 void	send_ray(t_inter *inter, int position, t_thread *src)
 {
 	int		x_y[2];
-	//t_vec2	screen_coord;
 	int		*cur_pixel;
-	//double	light_percent;
-	//t_color	*tmp;
+	double	aliasing_incrementer;
 
 	x_y[0] = position % WIDTH;
 	x_y[1] = position / HEIGHT;
-    
-    cur_pixel = get_pixel(x_y[0], x_y[1], src->rt->img);
-    t_color col = anti_alias(inter, x_y[0], x_y[1], src);
-    *cur_pixel = get_color_simple(&col);
-    
-//    screen_coord = v2_set((2.0 * x_y[0]) / WIDTH - 1.0,
-//                        (-2.0 * x_y[1]) / HEIGHT + 1.0);
-//    set_ray_direction(inter->ray, &screen_coord, &src->rt->cam);
-//    inter->t = RAY_T_MAX;
-//    cur_pixel = get_pixel(x_y[0], x_y[1], src->rt->img);
-//    if (shapeset_intersect(inter, src->rt->shapes))
-//    {
-//        light_percent = compute_light(inter, src->rt->shapes, src->rt->lights);
-//        tmp = get_color_from_list(inter->shape);
-//        *cur_pixel = get_color(tmp, light_percent);
-//    }
-//    else
-//        *cur_pixel = 0;
+	aliasing_incrementer = src->rt->is_anti_alias ? 0.25 : 1;
+	cur_pixel = get_pixel(x_y[0], x_y[1], src->rt->img);
+	*cur_pixel = anti_aliasing(inter, x_y, src, aliasing_incrementer);
 }
 
 void	*calculate(void *data)
