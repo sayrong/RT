@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 17:58:10 by cschoen           #+#    #+#             */
-/*   Updated: 2019/10/13 18:04:01 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/03 00:16:02 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ void	draw(t_rt *rt)
 	t_thread	data[THREADS_NUM];
 	int			i;
 
+	if (rt->marker == NULL)
+		rt->is_rgb = FALSE;
 	i = -1;
 	while (++i < THREADS_NUM)
 	{
@@ -61,6 +63,10 @@ void	draw(t_rt *rt)
 		if (pthread_join(threads[i], NULL))
 			p_error("pthread_join");
 	mlx_put_image_to_window(rt->mlx_ptr, rt->win_ptr, rt->img->img_ptr, 0, 0);
+	if (rt->is_rgb)
+		mlx_put_image_to_window(rt->mlx_ptr, rt->win_ptr,
+			rt->rgb_spectrum->img_ptr, 0, 0);
+	mlx_do_sync(rt->mlx_ptr);
 }
 
 

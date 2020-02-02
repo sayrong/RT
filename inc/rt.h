@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/29 14:15:02 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/01 19:04:27 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/03 01:42:42 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 
 # define TRUE 1
 # define FALSE 0
-# define WIDTH 800
-# define HEIGHT 800
+# define WIDTH 400
+# define HEIGHT 400
 # define PI 3.14159265359
 # define THREADS_NUM 8
 # define STEP (WIDTH * HEIGHT) / THREADS_NUM
@@ -74,6 +74,7 @@ typedef struct			s_list_shape
 {
 	void				*content;
 	t_shape_type		shape;
+	_Bool				marker;
 	struct s_list_shape	*next;
 }						t_list_shape;
 
@@ -164,13 +165,17 @@ typedef struct			s_rt
 	void				*mlx_ptr;
 	void				*win_ptr;
 	t_img				*img;
+	t_img				*rgb_spectrum;
 	t_cam				cam;
 	t_list_shape		*shapes;
+	t_list_shape		*marker;
 	t_list_light		*lights;
 	_Bool				cam_flg;
 	_Bool				amb_flg;
 	_Bool				play;
 	_Bool				is_anti_alias;
+	_Bool				is_rgb;
+	_Bool				is_move;
 }						t_rt;
 
 typedef struct			s_thread
@@ -185,6 +190,8 @@ int						usage(char *app_name);
 int						error(char *err_msg);
 int						p_error(char *err_msg);
 int						parse_error(char *err_msg, int line_num);
+
+void					del_shape(t_list_shape **shape);
 
 int						is_valid_whitespaces(char *str);
 int						is_valid_v3(char *str);
@@ -202,6 +209,7 @@ void					parse_shape(t_rt *rt, char **split, int line_num);
 void					parser(char *source, t_rt *rt, int fd, int line_num);
 
 t_img					*img_new(int width, int height, t_rt *rt);
+void					make_rgb_spectrum(char *data);
 int						*get_pixel(int x, int y, t_img *img);
 
 t_cam					camera_new(t_vec3 origin, t_vec3 target);
@@ -262,8 +270,11 @@ void					draw(t_rt *rt);
 
 int						red_x_button(void *param);
 int						deal_key(int key, void *param);
+int						mouse_press(int button, int x, int y, void *param);
+int						mouse_release(int button, int x, int y, void *param);
+int						mouse_move(int x, int y, void *param);
 
-t_color       			color_add(t_color c1, t_color c2);
+t_color					color_add(t_color c1, t_color c2);
 int						anti_aliasing(t_inter *inter, int *xy, t_thread *src, double incrementer);
 
 #endif

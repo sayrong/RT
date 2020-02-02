@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/28 20:32:31 by cschoen           #+#    #+#             */
-/*   Updated: 2019/10/14 22:31:43 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/03 01:52:01 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,11 @@ static int	no_hook(void *param)
 
 static void	input_hook(t_rt *rt)
 {
+	mlx_hook(rt->win_ptr, 4, 0, mouse_press, (void *)rt);
+	mlx_hook(rt->win_ptr, 5, 0, mouse_release, (void *)rt);
 	mlx_hook(rt->win_ptr, 17, 1, red_x_button, (void *)0);
 	mlx_hook(rt->win_ptr, 2, 3, deal_key, (void *)rt);
+	mlx_hook(rt->win_ptr, 6, (1L << 6), mouse_move, (void*)rt);
 	mlx_loop_hook(rt->mlx_ptr, no_hook, (void*)rt);
 }
 
@@ -50,8 +53,11 @@ static void	rt_init(t_rt *rt, int part)
 		rt->amb_flg = FALSE;
 		rt->lights = NULL;
 		rt->shapes = NULL;
+		rt->marker = NULL;
 		rt->play = FALSE;
 		rt->is_anti_alias = FALSE;
+		rt->is_rgb = FALSE;
+		rt->is_move = FALSE;
 	}
 	else if (part == 2)
 	{
@@ -60,6 +66,8 @@ static void	rt_init(t_rt *rt, int part)
 		rt->win_ptr = mlx_new_window(rt->mlx_ptr, WIDTH, HEIGHT, "RTv1");
 		!rt->win_ptr ? p_error("Failed to create a new window") : 0;
 		rt->img = img_new(WIDTH, HEIGHT, rt);
+		rt->rgb_spectrum = img_new(100, 100, rt);
+		make_rgb_spectrum(rt->rgb_spectrum->data);
 	}
 }
 

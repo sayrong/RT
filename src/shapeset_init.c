@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/30 23:48:51 by cschoen           #+#    #+#             */
-/*   Updated: 2019/10/13 18:05:43 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/02 21:09:08 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ _Bool	shapeset_intersect(t_inter *inter, t_list_shape *shape_list)
 
 	i = 0;
 	shape = shape_list;
-	if (!inter || !shape)
+	if (!inter)
 		error("NULL in shapeset_intersect");
 	does_intersect = FALSE;
 	while (shape != NULL)

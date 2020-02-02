@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 17:52:57 by cschoen           #+#    #+#             */
-/*   Updated: 2019/10/14 01:55:47 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/02 19:44:24 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ t_list_shape	*new_shape_list(void *content, t_shape_type type)
 	if (!(new = (t_list_shape*)malloc(sizeof(t_list_shape))))
 		p_error("malloc t_list_shape");
 	new->content = content;
+	new->marker = FALSE;
 	new->shape = type;
 	new->next = NULL;
 	return (new);
