@@ -27,8 +27,11 @@ t_color        color_mid(t_color c1, int hit)
 
 void make_average(t_color *color, double *light, int hit)
 {
-	*light = *light / hit;
-	*color = color_mid(*color, hit);
+	if (hit != 0)
+	{
+		*light = *light / hit;
+		*color = color_mid(*color, hit);
+	}
 }
 
 void init_aliasing(double *tmp_xy, int *xy, double *light, int *hit)
