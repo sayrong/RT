@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 17:17:56 by cschoen           #+#    #+#             */
-/*   Updated: 2019/10/14 22:41:16 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/09 18:05:19 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	del_split(char **split)
 
 static void	check_mistakes(t_rt *rt)
 {
-	!rt->cam_flg ? error("Camera is not initialized") : 0;
+	!rt->flg.cam_flg ? error("Camera is not initialized") : 0;
 	!rt->shapes ? error("Scene without shapes") : 0;
 	!rt->lights ? error("Scene without light") : 0;
 }
@@ -35,9 +35,9 @@ static void	parse_cam(t_rt *rt, char **split, int line_num)
 	t_vec3	origin;
 	t_vec3	target;
 
-	if (rt->cam_flg)
+	if (rt->flg.cam_flg)
 		parse_error("Should be only one camera on the scene", line_num);
-	rt->cam_flg = TRUE;
+	rt->flg.cam_flg = TRUE;
 	if (!split[1] || !split[2] || split[3])
 		parse_error("Camera should have two parameters", line_num);
 	if (!str_to_v3(&origin, split[1]))

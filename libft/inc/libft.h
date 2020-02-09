@@ -6,13 +6,13 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/02 17:00:38 by cschoen           #+#    #+#             */
-/*   Updated: 2020/01/12 23:01:32 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/09 11:52:36 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
-# define BUFF_SIZE 4
+# define BUFF_SIZE 50
 
 # include <string.h>
 # include <unistd.h>

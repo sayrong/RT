@@ -1,3 +1,5 @@
 *.[oa]
 bin/
 obj/
+.vscode/
+!.vscode/c_cpp_properties.json

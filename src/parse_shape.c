@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 19:56:31 by cschoen           #+#    #+#             */
-/*   Updated: 2019/10/13 18:41:15 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/09 18:06:39 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static void	parse_plane(t_rt *rt, char **split, int line_num)
 	plane = plane_new(position, normal, specular);
 	if (!str_to_rgb(&plane->color, split[4]))
 		parse_error("Invalid param: color value of the plane", line_num);
-	rt->shapes = add_new_shape(rt->shapes, plane, PLANE);
+	rt->shapes = add_new_shape(rt->shapes, plane, PLANE, &rt->shapes_cnt);
 }
 
 static void	parse_sphere(t_rt *rt, char **split, int line_num)
@@ -55,7 +55,7 @@ static void	parse_sphere(t_rt *rt, char **split, int line_num)
 	sphere = sphere_new(center, radius, specular);
 	if (!str_to_rgb(&sphere->color, split[4]))
 		parse_error("Invalid param: color value of the sphere", line_num);
-	rt->shapes = add_new_shape(rt->shapes, sphere, SPHERE);
+	rt->shapes = add_new_shape(rt->shapes, sphere, SPHERE, &rt->shapes_cnt);
 }
 
 static void	parse_cylinder(t_rt *rt, char **split, int line_num)
@@ -83,7 +83,7 @@ static void	parse_cylinder(t_rt *rt, char **split, int line_num)
 	cylinder = cylinder_new(pos_dir[0], pos_dir[1], radius, specular);
 	if (!str_to_rgb(&cylinder->color, split[5]))
 		parse_error("Invalid param: color value of the cylinder", line_num);
-	rt->shapes = add_new_shape(rt->shapes, cylinder, CYLINDER);
+	rt->shapes = add_new_shape(rt->shapes, cylinder, CYLINDER, &rt->shapes_cnt);
 }
 
 static void	parse_cone(t_rt *rt, char **split, int line_num)
@@ -110,7 +110,7 @@ static void	parse_cone(t_rt *rt, char **split, int line_num)
 	cone = cone_new(pos_dir[0], pos_dir[1], angle, specular);
 	if (!str_to_rgb(&cone->color, split[5]))
 		parse_error("Invalid param: color value of the cone", line_num);
-	rt->shapes = add_new_shape(rt->shapes, cone, CONE);
+	rt->shapes = add_new_shape(rt->shapes, cone, CONE, &rt->shapes_cnt);
 }
 
 void		parse_shape(t_rt *rt, char **split, int line_num)

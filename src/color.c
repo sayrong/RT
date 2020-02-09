@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 15:57:10 by cschoen           #+#    #+#             */
-/*   Updated: 2019/10/13 16:00:52 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/09 13:02:45 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ t_color	*get_color_from_list(t_list_shape *list)
 	return (NULL);
 }
 
-t_color        color_add(t_color c1, t_color c2)
+t_color	color_add(t_color c1, t_color c2)
 {
-	t_color color;
-	
+	t_color	color;
+
 	color.r = c1.r + c2.r;
 	color.g = c1.g + c2.g;
 	color.b = c1.b + c2.b;

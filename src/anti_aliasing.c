@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 17:58:10 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/02 21:58:24 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/09 13:00:44 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 //https://ru.wikipedia.org/wiki/Избыточная_выборка_сглаживания
 //М - чтобы выключить/включить
 
-t_color        color_mid(t_color c1, int hit)
+t_color	color_mid(t_color c1, int hit)
 {
-	t_color color;
+	t_color	color;
 
 	color.r = c1.r / hit;
 	color.g = c1.g / hit;
@@ -25,7 +25,7 @@ t_color        color_mid(t_color c1, int hit)
 	return (color);
 }
 
-void make_average(t_color *color, double *light, int hit)
+void	make_average(t_color *color, double *light, int hit)
 {
 	if (hit != 0)
 	{
@@ -34,7 +34,7 @@ void make_average(t_color *color, double *light, int hit)
 	}
 }
 
-void init_aliasing(double *tmp_xy, int *xy, double *light, int *hit)
+void	init_aliasing(double *tmp_xy, int *xy, double *light, int *hit)
 {
 	tmp_xy[0] = xy[0];
 	tmp_xy[1] = xy[1];
@@ -42,9 +42,9 @@ void init_aliasing(double *tmp_xy, int *xy, double *light, int *hit)
 	*hit = 0;
 }
 
-void init_ray(t_inter *inter, double *tmp_xy, t_thread *src)
+void	init_ray(t_inter *inter, double *tmp_xy, t_thread *src)
 {
-	t_vec2    screen_coord;
+	t_vec2	screen_coord;
 
 	inter->t = RAY_T_MAX;
 	screen_coord = v2_set((2.0 * tmp_xy[0]) / WIDTH - 1.0,
@@ -52,7 +52,7 @@ void init_ray(t_inter *inter, double *tmp_xy, t_thread *src)
 	set_ray_direction(inter->ray, &screen_coord, &src->rt->cam);
 }
 
-int anti_aliasing(t_inter *inter, int *xy, t_thread *src, double incrementer)
+int		anti_aliasing(t_inter *inter, int *xy, t_thread *src, double incrementer)
 {
 	double		tmp_xy[2];
 	t_color		total_color;

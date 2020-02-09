@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 17:52:57 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/02 19:44:24 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/09 16:16:52 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_list_shape	*new_shape_list(void *content, t_shape_type type)
 }
 
 t_list_shape	*add_new_shape(t_list_shape *list, void *content,
-								t_shape_type type)
+								t_shape_type type, int *counter)
 {
 	t_list_shape	*tmp;
 
@@ -39,6 +39,7 @@ t_list_shape	*add_new_shape(t_list_shape *list, void *content,
 			tmp = tmp->next;
 		tmp->next = new_shape_list(content, type);
 	}
+	++(*counter);
 	return (list);
 }
 
@@ -55,7 +56,7 @@ t_list_light	*new_light_list(t_light *light, t_light_type type)
 }
 
 t_list_light	*add_new_light(t_list_light *list, t_light *light,
-							t_light_type type)
+							t_light_type type, int *counter)
 {
 	t_list_light	*tmp;
 
@@ -68,5 +69,6 @@ t_list_light	*add_new_light(t_list_light *list, t_light *light,
 			tmp = tmp->next;
 		tmp->next = new_light_list(light, type);
 	}
+	++(*counter);
 	return (list);
 }

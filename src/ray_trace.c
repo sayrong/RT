@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 17:58:10 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/03 00:16:02 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/09 13:30:34 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,33 +42,6 @@ int		get_specular(t_inter *inter)
 	else
 		return ((t_cylinder*)inter->shape->content)->specular;
 }
-
-void	draw(t_rt *rt)
-{
-	pthread_t	threads[THREADS_NUM];
-	t_thread	data[THREADS_NUM];
-	int			i;
-
-	if (rt->marker == NULL)
-		rt->is_rgb = FALSE;
-	i = -1;
-	while (++i < THREADS_NUM)
-	{
-		data[i].rt = rt;
-		data[i].rt_id = i;
-		if (pthread_create(threads + i, NULL, calculate, &(data[i])))
-			p_error("pthread_create");
-	}
-	while (i--)
-		if (pthread_join(threads[i], NULL))
-			p_error("pthread_join");
-	mlx_put_image_to_window(rt->mlx_ptr, rt->win_ptr, rt->img->img_ptr, 0, 0);
-	if (rt->is_rgb)
-		mlx_put_image_to_window(rt->mlx_ptr, rt->win_ptr,
-			rt->rgb_spectrum->img_ptr, 0, 0);
-	mlx_do_sync(rt->mlx_ptr);
-}
-
 
 void	send_ray(t_inter *inter, int position, t_thread *src)
 {

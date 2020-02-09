@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/29 14:15:02 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/09 09:39:48 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/09 18:36:00 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,19 @@
 # define WIDTH 800
 # define HEIGHT 800
 # define PI 3.14159265359
-# define THREADS_NUM 8
-# define STEP (WIDTH * HEIGHT) / THREADS_NUM
 # define MOVE 0.02
 # define ANGLE 2
+# define MAX_CNT_LIGHTS 32
+# define MAX_CNT_SHAPES 64
+# define BUFFER_BYTES 13050
+# define SHADER_RT_FILE "./shader/obj/rt.frag"
 
-
+# include <GL/glew.h>
+# include <GLFW/glfw3.h>
 # include <mlx.h>
 # include <pthread.h>
 # include "../libvec/inc/libvec.h"
 # include "../libft/inc/libft.h"
-# include "macoskeys.h"
-# include <stdio.h>
 
 typedef struct			s_color
 {
@@ -143,42 +144,39 @@ typedef struct			s_camera
 	t_vec3				upguide;
 }						t_cam;
 
-typedef struct			s_img
+typedef struct			s_gl
 {
-	void				*img_ptr;
-	char				*data;
-	int					bpp;
-	int					size_line;
-	int					endian;
-	int					width;
-	int					height;
-}						t_img;
+	char				*vertex_shader_source;
+	char				*fragment_shader_source;
+	GLFWwindow			*window;
+	GLuint				fragment_shader;
+	GLuint				vertex_shader;
+	GLuint				shader_program;
+	GLuint				vbo;
+	GLuint				vao;
+	GLuint				ebo;
+}						t_gl;
+
+typedef struct			s_flag
+{
+	_Bool				cam_flg;
+	_Bool				amb_flg;
+	_Bool				is_anti_alias;
+	_Bool				is_rgb;
+	_Bool				is_move;
+}						t_flag;
 
 typedef struct			s_rt
 {
-	void				*mlx_ptr;
-	void				*win_ptr;
-	t_img				*img;
-	t_img				*rgb_spectrum;
+	t_gl				gl;
+	t_flag				flg;
 	t_cam				cam;
 	t_list_shape		*shapes;
 	t_list_shape		*marker;
 	t_list_light		*lights;
-	_Bool				cam_flg;
-	_Bool				amb_flg;
-	_Bool				play;
-	_Bool				is_anti_alias;
-	_Bool				is_rgb;
-	_Bool				is_move;
+	int					shapes_cnt;
+	int					lights_cnt;
 }						t_rt;
-
-typedef struct			s_thread
-{
-	t_rt				*rt;
-	int					rt_id;
-	int					y_min;
-	int					y_max;
-}						t_thread;
 
 int						usage(char *app_name);
 int						error(char *err_msg);
@@ -197,14 +195,25 @@ int						str_to_integer(int *num, char *str);
 int						str_to_v3(t_vec3 *vec, char *str);
 int						str_to_rgb(t_color *col, char *str);
 
+void					gl_init(t_rt *rt);
+void					callback_key(GLFWwindow *window, int key, int scancode,
+											int action);
+void					callback_mouse_button(GLFWwindow *window, int key,
+											int action, int mode);
+void					callback_cursor_position(GLFWwindow *window,
+											double xpos, double ypos);
+char					*combine_str_int_str(char *str1, int number,
+											char *str2);
+void					set_settings(t_rt *rt, GLuint shader_program);
+void					set_uniform_shape(t_list_shape *shape, int index,
+											GLuint shader_program);
+
 void					parse_ambient(t_rt *rt, char **split, int line_num);
 void					parse_point(t_rt *rt, char **split, int line_num);
 void					parse_shape(t_rt *rt, char **split, int line_num);
 void					parser(char *source, t_rt *rt, int fd, int line_num);
 
-t_img					*img_new(int width, int height, t_rt *rt);
 void					make_rgb_spectrum(char *data);
-int						*get_pixel(int x, int y, t_img *img);
 
 t_cam					camera_new(t_vec3 origin, t_vec3 target);
 t_plane					*plane_new(t_vec3 position, t_vec3 normal, int spec);
@@ -223,11 +232,11 @@ t_vec3					get_cone_normal(t_cone *cone, t_ray *ray,
 
 t_list_shape			*new_shape_list(void *content, t_shape_type type);
 t_list_shape			*add_new_shape(t_list_shape *list, void *content,
-									t_shape_type type);
+									t_shape_type type, int *counter);
 
 t_list_light			*new_light_list(t_light *light, t_light_type type);
 t_list_light			*add_new_light(t_list_light *list, t_light *light,
-									t_light_type type);
+									t_light_type type, int *counter);
 
 void					inter_new_ray(t_inter *inter, t_ray *ray);
 void					set_ray_direction(t_ray *r, t_vec2 *point, t_cam *cam);
@@ -258,17 +267,10 @@ void					white(t_color *color);
 int						get_color(t_color *c, double light);
 t_color					*get_color_from_list(t_list_shape *list);
 
-void					send_ray(t_inter *inter, int position, t_thread *src);
+
 void					*calculate(void *data);
 void					draw(t_rt *rt);
 
-int						red_x_button(void *param);
-int						deal_key(int key, void *param);
-int						mouse_press(int button, int x, int y, void *param);
-int						mouse_release(int button, int x, int y, void *param);
-int						mouse_move(int x, int y, void *param);
-
 t_color					color_add(t_color c1, t_color c2);
-int						anti_aliasing(t_inter *inter, int *xy, t_thread *src, double incrementer);
 
 #endif
