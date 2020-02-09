@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/09 13:45:52 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/09 18:11:30 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/09 20:32:45 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,13 +34,19 @@ static void	set_main_settings(GLuint shader_program, t_rt *rt)
 	GLint	i;
 
 	i = glGetUniformLocation(shader_program, "resolution");
-	glUniform2d(i, (GLfloat)WIDTH, (GLfloat)HEIGHT);
+	glUniform2f(i, (GLfloat)WIDTH, (GLfloat)HEIGHT);
 	i = glGetUniformLocation(shader_program, "flag.is_anti_alias");
 	glUniform1i(i, rt->flg.is_anti_alias);
 	i = glGetUniformLocation(shader_program, "LIGHT_CNT");
 	glUniform1i(i, rt->lights_cnt);
 	i = glGetUniformLocation(shader_program, "SHAPE_CNT");
 	glUniform1i(i, rt->shapes_cnt);
+	i = glGetUniformLocation(shader_program, "inter.ray.origin");
+	glUniform3f(i, rt->cam.origin.x, rt->cam.origin.y, rt->cam.origin.z);
+	i = glGetUniformLocation(shader_program, "inter.ray.t_max");
+	glUniform1f(i, RAY_T_MAX);
+	i = glGetUniformLocation(shader_program, "inter.t");
+	glUniform1f(i, RAY_T_MAX);
 }
 
 static void	set_uniform_cam(t_cam *camera, GLuint shader_program)

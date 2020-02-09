@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 17:58:10 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/09 13:00:44 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/09 21:18:13 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,6 @@ void	make_average(t_color *color, double *light, int hit)
 		*light = *light / hit;
 		*color = color_mid(*color, hit);
 	}
-}
-
-void	init_aliasing(double *tmp_xy, int *xy, double *light, int *hit)
-{
-	tmp_xy[0] = xy[0];
-	tmp_xy[1] = xy[1];
-	*light = 0;
-	*hit = 0;
 }
 
 void	init_ray(t_inter *inter, double *tmp_xy, t_thread *src)

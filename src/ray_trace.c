@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 17:58:10 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/09 13:30:34 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/09 20:37:05 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,22 +58,10 @@ void	send_ray(t_inter *inter, int position, t_thread *src)
 
 void	*calculate(void *data)
 {
-	int			start_end[2];
-	t_thread	*src;
-	t_ray		r;
-	t_inter		inter;
-
-	src = (t_thread *)data;
-	start_end[0] = STEP * src->rt_id;
-	start_end[1] = (src->rt_id == THREADS_NUM - 1) ?
-					HEIGHT * WIDTH : start_end[0] + STEP;
-	r.origin = src->rt->cam.origin;
-	r.t_max = RAY_T_MAX;
 	inter_new_ray(&inter, &r);
 	while (start_end[0] < start_end[1])
 	{
 		send_ray(&inter, start_end[0], src);
 		start_end[0]++;
 	}
-	return (NULL);
 }

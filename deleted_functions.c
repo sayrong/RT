@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/09 12:56:31 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/09 18:00:12 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/09 20:56:53 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,3 +297,11 @@ void	draw(t_rt *rt)
 //another
 void					send_ray(t_inter *inter, int position, t_thread *src);
 int						anti_aliasing(t_inter *inter, int *xy, t_thread *src, double incrementer);
+
+void	init_aliasing(double *tmp_xy, int *xy, double *light, int *hit)
+{
+	tmp_xy[0] = xy[0];
+	tmp_xy[1] = xy[1];
+	*light = 0;
+	*hit = 0;
+}

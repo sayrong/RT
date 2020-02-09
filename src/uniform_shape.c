@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/09 17:18:49 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/09 18:12:19 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/09 19:34:26 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static void	set_uniform_sphere(t_sphere *sphere, int index,
 	ft_strdel(&combine);
 	combine = combine_str_int_str("shapes[", index, "].sphere.radius");
 	i = glGetUniformLocation(shader_program, combine);
-	glUniform1d(i, sphere->radius);
+	glUniform1f(i, sphere->radius);
 	ft_strdel(&combine);
 }
 
