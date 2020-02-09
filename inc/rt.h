@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/29 14:15:02 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/03 02:50:45 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/09 09:39:48 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,12 @@
 # define MOVE 0.02
 # define ANGLE 2
 
-# ifdef __APPLE__
-#  include "OpenCL/opencl.h"
-#  include "macoskeys.h"
-# else
-#  include "CL/cl.h"
-#  include "linuxkeys.h"
-# endif
 
 # include <mlx.h>
 # include <pthread.h>
 # include "../libvec/inc/libvec.h"
 # include "../libft/inc/libft.h"
+# include "macoskeys.h"
 # include <stdio.h>
 
 typedef struct			s_color

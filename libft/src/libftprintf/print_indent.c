@@ -1,32 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strstr.c                                        :+:      :+:    :+:   */
+/*   print_indent.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/12 21:15:27 by cschoen           #+#    #+#             */
-/*   Updated: 2019/12/16 04:49:17 by cschoen          ###   ########.fr       */
+/*   Created: 2019/10/26 16:01:01 by cschoen           #+#    #+#             */
+/*   Updated: 2019/11/30 20:28:51 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strstr(const char *haystack, const char *needle)
+void	pft_print_indent(t_print *print, char c, int cnt)
 {
-	size_t	len_haystack;
-	size_t	len_needle;
-	size_t	i;
-
-	i = 0;
-	len_haystack = ft_strlen(haystack);
-	len_needle = ft_strlen(needle);
-	while (i + len_needle <= len_haystack)
-	{
-		if (ft_strncmp(haystack, needle, len_needle) == 0)
-			return ((char *)haystack);
-		++i;
-		++haystack;
-	}
-	return (NULL);
+	if (cnt <= 0)
+		return ;
+	print->len += cnt;
+	while (cnt--)
+		write(print->fd, &c, 1);
 }

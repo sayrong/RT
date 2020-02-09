@@ -6,18 +6,18 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/02 17:00:38 by cschoen           #+#    #+#             */
-/*   Updated: 2019/10/09 14:01:02 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/01/12 23:01:32 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 # define LIBFT_H
-# define BUFF_SIZE 32
+# define BUFF_SIZE 4
 
 # include <string.h>
 # include <unistd.h>
-# include <stdlib.h>
 # include <fcntl.h>
+# include "ftprintf.h"
 
 typedef struct		s_list
 {
@@ -25,6 +25,15 @@ typedef struct		s_list
 	size_t			content_size;
 	struct s_list	*next;
 }					t_list;
+
+typedef struct		s_dlist
+{
+	void			*content;
+	size_t			content_size;
+	void			*data;
+	struct s_dlist	*prev;
+	struct s_dlist	*next;
+}					t_dlist;
 
 size_t				ft_strlen(const char *s);
 size_t				ft_strlcat(char *dst, const char *src, size_t bytes);
@@ -97,5 +106,18 @@ void				ft_lstabi(t_list **alst, t_list *cur, size_t n);
 size_t				ft_wordcnt(const char *str, const char *c);
 char				**ft_strstrsplit(char const *s, char const *re);
 int					get_next_line(const int fd, char **line);
+char				*ft_itoa_base(uintmax_t num, uintmax_t base, char c);
+int					ft_printf(const char *format, ...);
+void				ft_del(void *content, size_t content_size);
+
+t_dlist				*ft_dlstnew(void const *content, size_t content_size);
+void				ft_dlstdelone(t_dlist **adlst, void (*del)(void *, size_t),
+								void (*del_data)(void *));
+void				ft_dlstdel(t_dlist **adlst, void (*del)(void *, size_t),
+								void (*del_data)(void *));
+t_dlist				*ft_dlstsplit(char const *s, char c);
+t_dlist				*ft_dlstargv(int argc, char **argv,
+									int first_index, int last_index);
+size_t				ft_dlstlen(t_dlist *lst);
 
 #endif

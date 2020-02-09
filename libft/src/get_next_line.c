@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/01/08 15:39:48 by cschoen           #+#    #+#             */
-/*   Updated: 2019/02/13 15:05:37 by cschoen          ###   ########.fr       */
+/*   Updated: 2019/12/16 07:12:33 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ static int		put_in_line(char **line, t_list **cur)
 	if (buffer == NULL)
 		return (-1);
 	*line = ft_strsub((*cur)->content, 0, index);
-	ft_memdel(&((*cur)->content));
+	ft_memdel(&(*cur)->content);
 	(*cur)->content = ft_strdup(buffer);
 	ft_strdel(&buffer);
 	return (((*cur)->content == NULL || *line == NULL) ? -1 : 1);

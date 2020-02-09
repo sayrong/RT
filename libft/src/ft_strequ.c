@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/12/14 19:31:25 by cschoen           #+#    #+#             */
-/*   Updated: 2018/12/31 17:32:46 by cschoen          ###   ########.fr       */
+/*   Updated: 2019/12/15 16:13:44 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,10 @@ int	ft_strequ(char const *s1, char const *s2)
 {
 	if (s1 == NULL || s2 == NULL)
 		return (0);
-	while (*s1 && *s2 && *s1 == *s2)
+	while (*s1 && *s1 == *s2)
 	{
-		s1++;
-		s2++;
+		++s1;
+		++s2;
 	}
 	return (*s1 == *s2);
 }

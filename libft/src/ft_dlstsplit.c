@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_lstsplit.c                                      :+:      :+:    :+:   */
+/*   ft_dlstsplit.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/12/31 17:53:44 by cschoen           #+#    #+#             */
-/*   Updated: 2019/12/08 17:06:07 by cschoen          ###   ########.fr       */
+/*   Created: 2019/12/06 02:02:02 by cschoen           #+#    #+#             */
+/*   Updated: 2020/01/12 23:11:02 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static size_t	ft_len(char const *s, char c)
 
 	num = 0;
 	while (*s && *s++ != c)
-		num++;
+		++num;
 	return (num);
 }
 
@@ -31,29 +31,48 @@ static _Bool	ft_is_end(char const *s, char c)
 	return (0);
 }
 
-t_list			*ft_lstsplit(char const *s, char c)
+static t_dlist	*ft_dlstsplit2(char const *s, char c,
+								t_dlist **start, size_t len)
 {
-	t_list	*elem;
+	t_dlist	*elem;
+	char	*str;
+
+	elem = *start;
+	while (!ft_is_end(s + len, c))
+	{
+		s = s + len;
+		while (*s && *s == c)
+			++s;
+		len = ft_len(s, c);
+		if (!(str = ft_strsub(s, 0, len)))
+			ft_dlstdel(start, ft_del, NULL);
+		else if (!(elem->next = ft_dlstnew(str, len + 1)))
+			ft_dlstdel(start, ft_del, NULL);
+		ft_strdel(&str);
+		if (!(*start))
+			return (*start);
+		elem->next->prev = elem;
+		elem = elem->next;
+	}
+	return (*start);
+}
+
+t_dlist			*ft_dlstsplit(char const *s, char c)
+{
+	t_dlist	*start;
 	char	*str;
 	size_t	len;
 
-	elem = NULL;
-	if (s == NULL)
+	if (!s)
 		return (NULL);
 	while (*s && *s == c)
 		++s;
 	len = ft_len(s, c);
 	if (!(str = ft_strsub(s, 0, len)))
 		return (NULL);
-	if (!(elem = ft_lstnew(str, len + 1)))
-	{
-		ft_strdel(&str);
-		return (NULL);
-	}
+	start = ft_dlstnew(str, len + 1);
 	ft_strdel(&str);
-	if (ft_is_end(s + len, c))
-		elem->next = NULL;
-	else if (!(elem->next = ft_lstsplit(s + len, c)))
-		ft_lstdelone(&elem, ft_del);
-	return (elem);
+	if (!start)
+		return (NULL);
+	return (ft_dlstsplit2(s, c, &start, len));
 }

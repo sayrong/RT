@@ -6,15 +6,13 @@
 #    By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/07 02:04:41 by cschoen           #+#    #+#              #
-#    Updated: 2020/02/02 21:14:25 by cschoen          ###   ########.fr        #
+#    Updated: 2020/02/09 09:32:21 by cschoen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-.PHONY: clean fclean re norm fullnorm git
+.PHONY: clean fclean re norm fullnorm
 
-OS = MACOS
-C = fast commit
-NAME = RTv1
+NAME = RT
 
 LIB_FT = libft.a
 LIB_VEC = libvec.a
@@ -31,9 +29,10 @@ VECINC = $(VECDIR)inc/
 
 LFTNAME = $(LFTDIR)$(LIB_FT)
 VECNAME = $(VECDIR)$(LIB_VEC)
+BINNAME = $(BINDIR)$(NAME)
 
-LIBHEAD = $(LFTINC)libft.h $(VECINC)libvec.h
-INCNAME = $(INCDIR)rt.h $(INCDIR)linuxkeys.h $(INCDIR)macoskeys.h
+LIBHEAD = $(LFTINC)libft.h $(LFTINC)ftprintf.h $(VECINC)libvec.h
+INCNAME = $(INCDIR)rt.h $(INCDIR)macoskeys.h
 
 SRCNAME = main.c ray_trace.c plane_init.c sphere_init.c deal_key.c error.c \
 		intersection_init.c camera_init.c image_init.c color.c \
@@ -54,26 +53,34 @@ LFTSRCNAME = ft_strlen.c ft_strlcat.c ft_memcmp.c ft_atoi.c ft_isascii.c \
 		ft_putendl_fd.c ft_putnbr_fd.c ft_lstnew.c ft_lstdelone.c ft_lstdel.c \
 		ft_lstadd.c ft_lstiter.c ft_lstmap.c ft_abs.c ft_dabs.c ft_strrev.c \
 		ft_lstlen.c ft_lstsplit.c ft_lstabi.c ft_wordcnt.c ft_strstrsplit.c \
-		get_next_line.c
+		get_next_line.c ft_itoa_base.c ft_printf.c ft_del.c ft_dlstnew.c \
+		ft_dlstdel.c ft_dlstdelone.c ft_dlstsplit.c ft_dlstargv.c ft_dlstlen.c
+
+PFTSRCNAME = validator.c parser.c parse_addition.c parse_flag.c \
+		parse_width.c parse_precision.c parse_length.c parse_type.c color.c \
+		choose_type.c print_wchar.c print_indent.c print_d.c print_u.c \
+		print_o.c print_x.c print_f.c print_c.c print_s.c print_p.c \
+		print_percent.c print_other.c calculator.c calculate_f.c cleaner.c
 
 VECSRCNAME = v3_new.c v3_add.c v3_sub.c v3_scale.c v3_div.c v3_dot.c \
 		v3_length_sq.c v3_length.c v3_norm.c v3_cross.c v2_set.c p2_set.c \
 		v3_rot_x.c v3_rot_y.c v3_rot_z.c
 
 LFTSRC = $(addprefix $(LFTDIR)src/, $(LFTSRCNAME))
+PFTSRC = $(addprefix $(LFTDIR)src/libftprintf/, $(PFTSRCNAME))
 VECSRC = $(addprefix $(VECDIR)src/, $(VECSRCNAME))
 SRC = $(addprefix $(SRCDIR), $(SRCNAME))
 OBJ = $(addprefix $(OBJDIR), $(SRCNAME:.c=.o))
 
 INC = -I $(INCDIR) -I $(LFTINC) -I $(VECINC)
 
+MACOS = -framework OpenGL -framework AppKit
+
 VECINIT = -I $(VECDIR) -L $(VECDIR) -lvec -lm
 LFTINIT = -I $(LFTDIR) -L $(LFTDIR) -lft
-MLXINIT = -I /usr/local/include -L /usr/local/lib -lmlx
+MLXINIT = -I /usr/local/include -L /usr/local/lib -lmlx $(MACOS)
 
-LINUX = -lXext -lX11 -lm -lpthread
-MACOS = -framework OpenGL -framework AppKit
-WFLAGS = -Wall -Wextra -Werror -g
+GCC = gcc -Wall -Wextra -Werror -g
 
 RED = \033[31m
 GREEN = \033[32m
@@ -83,47 +90,46 @@ PURPLE = \033[35m
 CYAN = \033[36m
 NONE = \033[0m
 
-all: $(BINDIR)$(NAME)
+all: $(BINNAME)
 
-$(BINDIR)$(NAME): $(OBJDIR) $(OBJ) $(LFTSRC) $(VECSRC) $(INCNAME) $(LIBHEAD)
+$(BINNAME): $(OBJDIR) $(OBJ) $(LFTSRC) $(PFTSRC) $(VECSRC) $(INCNAME) $(LIBHEAD)
 	@$(MAKE) -C $(LFTDIR)
-	@printf "$(PURPLE)RTv1:\t$(YELLOW)%-25s$(GREEN)[done]$(NONE)\n" $(LIB_FT)
+	@printf "$(PURPLE)RT:\t$(YELLOW)%-35s$(GREEN)[done]$(NONE)\n" $(LIB_FT)
 	@$(MAKE) -C $(VECDIR)
-	@printf "$(PURPLE)RTv1:\t$(YELLOW)%-25s$(GREEN)[done]$(NONE)\n" $(LIB_VEC)
+	@printf "$(PURPLE)RT:\t$(YELLOW)%-35s$(GREEN)[done]$(NONE)\n" $(LIB_VEC)
 	@mkdir -p $(BINDIR)
-	@printf "$(PURPLE)RTv1:\t$(BLUE)%-25s$(GREEN)[done]$(NONE)\n" $(BINDIR)
-	@gcc $(WFLAGS) $(OBJ) $(MLXINIT) $($(OS)) $(LFTINIT) $(VECINIT) \
-	-I $(INCDIR) -o $(BINDIR)$(NAME)
-	@printf "$(PURPLE)RTv1:\t$(YELLOW)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@printf "$(PURPLE)RT:\t$(BLUE)%-35s$(GREEN)[done]$(NONE)\n" $(BINDIR)
+	@$(GCC) $(OBJ) $(MLXINIT) $(LFTINIT) $(VECINIT) -I $(INCDIR) -o $(BINNAME)
+	@printf "$(PURPLE)RT:\t$(YELLOW)%-35s$(GREEN)[done]$(NONE)\n" $@
 
 $(LIB_FT):
 	@$(MAKE) -C $(LFTDIR)
-	@printf "$(PURPLE)RTv1:\t$(YELLOW)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@printf "$(PURPLE)RT:\t$(YELLOW)%-35s$(GREEN)[done]$(NONE)\n" $@
 
 $(LIB_VEC):
 	@$(MAKE) -C $(VECDIR)
-	@printf "$(PURPLE)RTv1:\t$(YELLOW)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@printf "$(PURPLE)RT:\t$(YELLOW)%-35s$(GREEN)[done]$(NONE)\n" $@
 
 $(OBJDIR):
 	@mkdir -p $(OBJDIR)
-	@printf "$(PURPLE)RTv1:\t$(BLUE)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@printf "$(PURPLE)RT:\t$(BLUE)%-35s$(GREEN)[done]$(NONE)\n" $@
 
 $(OBJDIR)%.o: $(SRCDIR)%.c $(INCNAME)
-	@gcc $(WFLAGS) -c $(INC) $< -o $@
-	@printf "$(PURPLE)RTv1:\t$(CYAN)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@$(GCC) -c $(INC) $< -o $@
+	@printf "$(PURPLE)RT:\t$(CYAN)%-35s$(GREEN)[done]$(NONE)\n" $@
 
 clean:
 	@$(MAKE) -C $(LFTDIR) clean
 	@$(MAKE) -C $(VECDIR) clean
 	@rm -rf $(OBJDIR)
-	@printf "$(PURPLE)RTv1:\t$(RED)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@printf "$(PURPLE)RT:\t$(RED)%-35s$(GREEN)[done]$(NONE)\n" $@
 
 fclean:
 	@$(MAKE) -C $(LFTDIR) fclean
 	@$(MAKE) -C $(VECDIR) fclean
 	@rm -rf $(OBJDIR)
 	@rm -rf $(BINDIR)
-	@printf "$(PURPLE)RTv1:\t$(RED)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@printf "$(PURPLE)RT:\t$(RED)%-35s$(GREEN)[done]$(NONE)\n" $@
 
 re: fclean all
 
@@ -133,11 +139,3 @@ norm:
 fullnorm: norm
 	@$(MAKE) -C $(LFTDIR) norm
 	@$(MAKE) -C $(VECDIR) norm
-
-git: fclean
-	git status
-	git add *
-	git status
-	git commit -m "$(C)"
-	git status
-	git push

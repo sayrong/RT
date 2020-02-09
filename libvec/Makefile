@@ -6,7 +6,7 @@
 #    By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/07 02:53:18 by cschoen           #+#    #+#              #
-#    Updated: 2019/10/14 05:17:40 by cschoen          ###   ########.fr        #
+#    Updated: 2020/02/09 09:35:20 by cschoen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,24 +40,24 @@ all: $(NAME)
 $(NAME): $(INC) $(OBJDIR) $(OBJ)
 	@ar rc $(NAME) $(OBJ)
 	@ranlib $(NAME)
-	@printf "$(PURPLE)Libvec:\t$(YELLOW)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@printf "$(PURPLE)Libvec:\t$(YELLOW)%-35s$(GREEN)[done]$(NONE)\n" $@
 
 $(OBJDIR):
 	@mkdir -p $(OBJDIR)
-	@printf "$(PURPLE)Libvec:\t$(BLUE)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@printf "$(PURPLE)Libvec:\t$(BLUE)%-35s$(GREEN)[done]$(NONE)\n" $@
 
 $(OBJDIR)%.o:$(SRCDIR)%.c $(INC)
 	@$(GCC) -c -I $(INCDIR) $< -o $@
-	@printf "$(PURPLE)Libvec:\t$(CYAN)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@printf "$(PURPLE)Libvec:\t$(CYAN)%-35s$(GREEN)[done]$(NONE)\n" $@
 
 clean:
 	@/bin/rm -rf $(OBJDIR)
-	@printf "$(PURPLE)Libvec:\t$(RED)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@printf "$(PURPLE)Libvec:\t$(RED)%-35s$(GREEN)[done]$(NONE)\n" $@
 
 fclean:
 	@/bin/rm -rf $(OBJDIR)
 	@/bin/rm -rf $(NAME)
-	@printf "$(PURPLE)Libvec:\t$(RED)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@printf "$(PURPLE)Libvec:\t$(RED)%-35s$(GREEN)[done]$(NONE)\n" $@
 
 re: fclean all
 
