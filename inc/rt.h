@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/29 14:15:02 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/03 01:42:42 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/03 02:50:45 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@
 
 # define TRUE 1
 # define FALSE 0
-# define WIDTH 400
-# define HEIGHT 400
+# define WIDTH 800
+# define HEIGHT 800
 # define PI 3.14159265359
 # define THREADS_NUM 8
 # define STEP (WIDTH * HEIGHT) / THREADS_NUM
