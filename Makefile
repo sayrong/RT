@@ -6,15 +6,13 @@
 #    By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/07 02:04:41 by cschoen           #+#    #+#              #
-#    Updated: 2020/02/02 21:14:25 by cschoen          ###   ########.fr        #
+#    Updated: 2020/02/03 23:31:02 by cschoen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 .PHONY: clean fclean re norm fullnorm git
 
-OS = MACOS
-C = fast commit
-NAME = RTv1
+NAME = RT
 
 LIB_FT = libft.a
 LIB_VEC = libvec.a
@@ -71,8 +69,12 @@ VECINIT = -I $(VECDIR) -L $(VECDIR) -lvec -lm
 LFTINIT = -I $(LFTDIR) -L $(LFTDIR) -lft
 MLXINIT = -I /usr/local/include -L /usr/local/lib -lmlx
 
-LINUX = -lXext -lX11 -lm -lpthread
-MACOS = -framework OpenGL -framework AppKit
+ifeq ($(shell uname),Linux)
+	MLX = $(MLXINIT) -lXext -lX11 -lm -lpthread
+else
+	MLX = $(MLXINIT) -framework OpenGL -framework AppKit
+endif
+
 WFLAGS = -Wall -Wextra -Werror -g
 
 RED = \033[31m
@@ -87,43 +89,43 @@ all: $(BINDIR)$(NAME)
 
 $(BINDIR)$(NAME): $(OBJDIR) $(OBJ) $(LFTSRC) $(VECSRC) $(INCNAME) $(LIBHEAD)
 	@$(MAKE) -C $(LFTDIR)
-	@printf "$(PURPLE)RTv1:\t$(YELLOW)%-25s$(GREEN)[done]$(NONE)\n" $(LIB_FT)
+	@printf "$(PURPLE)RT:\t$(YELLOW)%-25s$(GREEN)[done]$(NONE)\n" $(LIB_FT)
 	@$(MAKE) -C $(VECDIR)
-	@printf "$(PURPLE)RTv1:\t$(YELLOW)%-25s$(GREEN)[done]$(NONE)\n" $(LIB_VEC)
+	@printf "$(PURPLE)RT:\t$(YELLOW)%-25s$(GREEN)[done]$(NONE)\n" $(LIB_VEC)
 	@mkdir -p $(BINDIR)
-	@printf "$(PURPLE)RTv1:\t$(BLUE)%-25s$(GREEN)[done]$(NONE)\n" $(BINDIR)
-	@gcc $(WFLAGS) $(OBJ) $(MLXINIT) $($(OS)) $(LFTINIT) $(VECINIT) \
+	@printf "$(PURPLE)RT:\t$(BLUE)%-25s$(GREEN)[done]$(NONE)\n" $(BINDIR)
+	@gcc $(WFLAGS) $(OBJ) $(MLX) $(LFTINIT) $(VECINIT) \
 	-I $(INCDIR) -o $(BINDIR)$(NAME)
-	@printf "$(PURPLE)RTv1:\t$(YELLOW)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@printf "$(PURPLE)RT:\t$(YELLOW)%-25s$(GREEN)[done]$(NONE)\n" $@
 
 $(LIB_FT):
 	@$(MAKE) -C $(LFTDIR)
-	@printf "$(PURPLE)RTv1:\t$(YELLOW)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@printf "$(PURPLE)RT:\t$(YELLOW)%-25s$(GREEN)[done]$(NONE)\n" $@
 
 $(LIB_VEC):
 	@$(MAKE) -C $(VECDIR)
-	@printf "$(PURPLE)RTv1:\t$(YELLOW)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@printf "$(PURPLE)RT:\t$(YELLOW)%-25s$(GREEN)[done]$(NONE)\n" $@
 
 $(OBJDIR):
 	@mkdir -p $(OBJDIR)
-	@printf "$(PURPLE)RTv1:\t$(BLUE)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@printf "$(PURPLE)RT:\t$(BLUE)%-25s$(GREEN)[done]$(NONE)\n" $@
 
 $(OBJDIR)%.o: $(SRCDIR)%.c $(INCNAME)
 	@gcc $(WFLAGS) -c $(INC) $< -o $@
-	@printf "$(PURPLE)RTv1:\t$(CYAN)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@printf "$(PURPLE)RT:\t$(CYAN)%-25s$(GREEN)[done]$(NONE)\n" $@
 
 clean:
 	@$(MAKE) -C $(LFTDIR) clean
 	@$(MAKE) -C $(VECDIR) clean
 	@rm -rf $(OBJDIR)
-	@printf "$(PURPLE)RTv1:\t$(RED)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@printf "$(PURPLE)RT:\t$(RED)%-25s$(GREEN)[done]$(NONE)\n" $@
 
 fclean:
 	@$(MAKE) -C $(LFTDIR) fclean
 	@$(MAKE) -C $(VECDIR) fclean
 	@rm -rf $(OBJDIR)
 	@rm -rf $(BINDIR)
-	@printf "$(PURPLE)RTv1:\t$(RED)%-25s$(GREEN)[done]$(NONE)\n" $@
+	@printf "$(PURPLE)RT:\t$(RED)%-25s$(GREEN)[done]$(NONE)\n" $@
 
 re: fclean all
 
@@ -133,11 +135,3 @@ norm:
 fullnorm: norm
 	@$(MAKE) -C $(LFTDIR) norm
 	@$(MAKE) -C $(VECDIR) norm
-
-git: fclean
-	git status
-	git add *
-	git status
-	git commit -m "$(C)"
-	git status
-	git push

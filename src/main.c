@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/28 20:32:31 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/03 01:52:01 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/03 21:39:28 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ static int	no_hook(void *param)
 
 static void	input_hook(t_rt *rt)
 {
-	mlx_hook(rt->win_ptr, 4, 0, mouse_press, (void *)rt);
-	mlx_hook(rt->win_ptr, 5, 0, mouse_release, (void *)rt);
+	mlx_hook(rt->win_ptr, 4, (1L << 2), mouse_press, (void *)rt);
+	mlx_hook(rt->win_ptr, 5, (1L << 3), mouse_release, (void *)rt);
 	mlx_hook(rt->win_ptr, 17, 1, red_x_button, (void *)0);
 	mlx_hook(rt->win_ptr, 2, 3, deal_key, (void *)rt);
 	mlx_hook(rt->win_ptr, 6, (1L << 6), mouse_move, (void*)rt);

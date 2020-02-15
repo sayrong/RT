@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/29 14:15:02 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/03 01:42:42 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/03 21:35:13 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@
 #  include "OpenCL/opencl.h"
 #  include "macoskeys.h"
 # else
-#  include "CL/cl.h"
+//#  include "CL/cl.h"
 #  include "linuxkeys.h"
 # endif
 
