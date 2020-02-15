@@ -6,13 +6,13 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 03:29:58 by cschoen           #+#    #+#             */
-/*   Updated: 2019/10/07 03:31:28 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/15 20:49:15 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libvec.h"
 
-double	v3_dot(t_vec3 v1, t_vec3 v2)
+float	v3_dot(t_vec3 v1, t_vec3 v2)
 {
 	return (v1.x * v2.x + v1.y * v2.y + v1.z * v2.z);
 }

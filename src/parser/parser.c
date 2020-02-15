@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 17:17:56 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/09 18:05:19 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/15 20:47:55 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,26 +68,29 @@ static void	parse_split(char **split, t_rt *rt, int line_num)
 		parse_ambient(rt, split, line_num);
 	else if (ft_strequ(split[0], "point"))
 		parse_point(rt, split, line_num);
+//	else if (ft_strequ(split[0], "direction"))
+//		TODO parse_direction();
 	else if (ft_strequ(split[0], "plane") || ft_strequ(split[0], "sphere") ||
 			ft_strequ(split[0], "cylinder") || ft_strequ(split[0], "cone"))
 		parse_shape(rt, split, line_num);
 	else
 		parse_error("Unknown string", line_num);
-	del_split(split);
+
 }
 
-void		parser(char *source, t_rt *rt, int fd, int line_num)
+void		parser(t_rt *rt, int fd)
 {
-	int		res;
+	int		line_num;
+	int		gnl;
 	char	*line;
 	char	*trim;
 	char	**split;
 
-	(fd = open(source, O_RDONLY)) < 0 ? p_error("Can't open the file") : 0;
+	line_num = 0;
 	line = NULL;
-	while ((res = get_next_line(fd, &line)) && ++line_num)
+	while ((gnl = get_next_line(fd, &line)) && ++line_num)
 	{
-		res < 0 ? p_error("Reading error") : 0;
+		gnl < 0 ? p_error("Reading error") : 0;
 		!(trim = ft_strtrim(line)) ? p_error("ft_strtrim") : ft_strdel(&line);
 		(*trim == '#' || *trim == '\0') ? ft_strdel(&trim) : 0;
 		if (!trim)
@@ -98,6 +101,7 @@ void		parser(char *source, t_rt *rt, int fd, int line_num)
 		!split[0] ? parse_error("Unknown string", line_num) : 0;
 		ft_strdel(&trim);
 		parse_split(split, rt, line_num);
+		del_split(split);
 	}
 	close(fd);
 	check_mistakes(rt);

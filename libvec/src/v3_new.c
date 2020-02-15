@@ -6,13 +6,13 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 03:25:59 by cschoen           #+#    #+#             */
-/*   Updated: 2019/10/07 21:20:43 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/15 20:49:15 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libvec.h"
 
-t_vec3	v3_new(double x, double y, double z)
+t_vec3	v3_new(float x, float y, float z)
 {
 	t_vec3	new_v;
 

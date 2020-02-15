@@ -6,13 +6,13 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 14:27:03 by cschoen           #+#    #+#             */
-/*   Updated: 2019/10/13 14:35:29 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/15 20:49:15 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libvec.h"
 
-t_vec3	v3_div(t_vec3 v, double a)
+t_vec3	v3_div(t_vec3 v, float a)
 {
 	v.x /= a;
 	v.y /= a;

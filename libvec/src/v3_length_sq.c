@@ -6,13 +6,13 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 14:27:12 by cschoen           #+#    #+#             */
-/*   Updated: 2019/10/13 14:36:18 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/15 20:49:15 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libvec.h"
 
-double	v3_length_sq(t_vec3 v)
+float	v3_length_sq(t_vec3 v)
 {
 	return (v.x * v.x + v.y * v.y + v.z * v.z);
 }

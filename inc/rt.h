@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/29 14:15:02 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/09 18:36:00 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/15 21:05:11 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,26 +34,42 @@
 # include <pthread.h>
 # include "../libvec/inc/libvec.h"
 # include "../libft/inc/libft.h"
+# include "macoskeys.h"
 
 typedef struct			s_color
 {
-	int					r;
-	int					g;
-	int					b;
+	float				r;
+	float				g;
+	float				b;
 }						t_color;
+
+typedef	struct			s_material
+{
+	t_color				color;
+	float				specular;
+}						t_material;
+
+typedef	struct			s_transform
+{
+	t_vec3				position;
+	t_vec3				rotation;
+}						t_transform;
 
 typedef enum			e_light_type
 {
 	AMBIENT,
-	POINT
+	POINT,
+	DIRECTION,
+	CNT_OF_TYPES
 }						t_light_type;
 
 typedef struct			s_light
 {
 	t_light_type		type;
-	double				intensity;
-	t_vec3				position;
-	t_vec3				target;
+	t_transform			transform;
+	t_vec3				direction;
+	float				intensity;
+	float				radius;
 }						t_light;
 
 typedef enum			e_shape_type
@@ -134,14 +150,16 @@ typedef struct			s_intersection
 
 typedef struct			s_camera
 {
-	double				h;
-	double				w;
-	t_vec3				origin;
-	t_vec3				target;
-	t_vec3				forward;
-	t_vec3				up;
-	t_vec3				right;
-	t_vec3				upguide;
+	t_transform			transform;
+	t_vec3				direction;
+	// double				h;
+	// double				w;
+	// t_vec3				origin;
+	// t_vec3				target;
+	// t_vec3				forward;
+	// t_vec3				up;
+	// t_vec3				right;
+	// t_vec3				upguide;
 }						t_cam;
 
 typedef struct			s_gl
@@ -157,10 +175,30 @@ typedef struct			s_gl
 	GLuint				ebo;
 }						t_gl;
 
+typedef struct			s_img
+{
+	void				*img_ptr;
+	char				*data;
+	int					bpp;
+	int					size_line;
+	int					endian;
+	int					width;
+	int					height;
+}						t_img;
+
+typedef struct			s_mlx
+{
+	void				*mlx_ptr;
+	void				*win_ptr;
+	t_img				*img;
+	t_img				*rgb_spectrum;
+}						t_mlx;
+
 typedef struct			s_flag
 {
 	_Bool				cam_flg;
 	_Bool				amb_flg;
+	_Bool				play;
 	_Bool				is_anti_alias;
 	_Bool				is_rgb;
 	_Bool				is_move;
@@ -169,6 +207,7 @@ typedef struct			s_flag
 typedef struct			s_rt
 {
 	t_gl				gl;
+	t_mlx				mlx;
 	t_flag				flg;
 	t_cam				cam;
 	t_list_shape		*shapes;
@@ -178,7 +217,7 @@ typedef struct			s_rt
 	int					lights_cnt;
 }						t_rt;
 
-int						usage(char *app_name);
+void					usage(char *app_name);
 int						error(char *err_msg);
 int						p_error(char *err_msg);
 int						parse_error(char *err_msg, int line_num);
@@ -211,7 +250,7 @@ void					set_uniform_shape(t_list_shape *shape, int index,
 void					parse_ambient(t_rt *rt, char **split, int line_num);
 void					parse_point(t_rt *rt, char **split, int line_num);
 void					parse_shape(t_rt *rt, char **split, int line_num);
-void					parser(char *source, t_rt *rt, int fd, int line_num);
+void					parser(t_rt *rt, int fd);
 
 void					make_rgb_spectrum(char *data);
 

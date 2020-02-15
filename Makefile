@@ -6,7 +6,7 @@
 #    By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/07 02:04:41 by cschoen           #+#    #+#              #
-#    Updated: 2020/02/09 18:34:10 by cschoen          ###   ########.fr        #
+#    Updated: 2020/02/15 13:38:41 by cschoen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -37,6 +37,7 @@ SHROBJDIR = $(SHRDIR)obj/
 LFTINC = $(LFTDIR)inc/
 VECINC = $(VECDIR)inc/
 OGLINC = ~/.brew/include/
+MLXINC = /usr/local/include
 
 #	BINARY PATH
 LFTNAME = $(LFTDIR)$(LIB_FT)
@@ -45,7 +46,7 @@ BINNAME = $(BINDIR)$(NAME)
 
 #	HEADERS
 LIBHEAD = $(LFTINC)libft.h $(LFTINC)ftprintf.h $(VECINC)libvec.h
-INCNAME = $(INCDIR)rt.h
+INCNAME = $(INCDIR)rt.h $(INCDIR)macoskeys.h
 
 #	MAIN SOURCES
 SRCNAME = main.c error.c validator.c gl.c draw.c cleaner.c \
@@ -99,13 +100,15 @@ SHRSRC = $(addprefix $(SHRSRCDIR), $(SHRNAME))
 SHROBJ = $(addprefix $(SHROBJDIR), $(SHRNAME:.glsl=.frag))
 
 #	INCLUDE FLAGS
-INC = -I $(OGLINC) -I $(INCDIR) -I $(LFTINC) -I $(VECINC)
+INC = -I $(OGLINC) -I $(MLXINC) -I $(INCDIR) -I $(LFTINC) -I $(VECINC)
 
 #	LINKERS
 VECINIT = -L $(VECDIR) -lvec -lm
 LFTINIT = -L $(LFTDIR) -lft
 OGLINIT = -L ~/.brew/lib
+MLXINIT = -L /usr/local/lib
 OGLFLAG = -lglfw -lglew -framework OpenGL
+MLXFLAG = -lmlx -framework OpenGL -framework AppKit
 
 #	GCC
 GCC = gcc -O2 -Wall -Wextra -Werror -g
@@ -128,7 +131,7 @@ $(BINNAME): $(OBJDIR) $(OBJ) $(LFTSRC) $(PFTSRC) $(VECSRC) $(INCNAME) $(LIBHEAD)
 	@printf "$(PURPLE)RT:\t$(YELLOW)%-35s$(GREEN)[done]$(NONE)\n" $(LIB_VEC)
 	@mkdir -p $(BINDIR)
 	@printf "$(PURPLE)RT:\t$(BLUE)%-35s$(GREEN)[done]$(NONE)\n" $(BINDIR)
-	@$(GCC) $(OGLFLAG) -o $(BINNAME) $(INC) $(LFTINIT) $(VECINIT) $(OBJ) $(OGLINIT)
+	@$(GCC) $(OGLFLAG) $(MLXFLAG) -o $(BINNAME) $(INC) $(LFTINIT) $(VECINIT) $(OBJ) $(OGLINIT) $(MLXINIT)
 	@printf "$(PURPLE)RT:\t$(YELLOW)%-35s$(GREEN)[done]$(NONE)\n" $@
 
 $(LIB_FT):
