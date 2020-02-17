@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/09 13:45:52 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/09 20:32:45 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/16 21:57:49 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,64 +29,49 @@ char		*combine_str_int_str(char *str1, int number, char *str2)
 	return (result);
 }
 
+float		clamp(float number, float min, float max)
+{
+	if (number > max)
+		return (max);
+	else if (number < min)
+		return (min);
+	else
+		return (number);
+}
+
 static void	set_main_settings(GLuint shader_program, t_rt *rt)
 {
 	GLint	i;
 
 	i = glGetUniformLocation(shader_program, "resolution");
 	glUniform2f(i, (GLfloat)WIDTH, (GLfloat)HEIGHT);
-	i = glGetUniformLocation(shader_program, "flag.is_anti_alias");
-	glUniform1i(i, rt->flg.is_anti_alias);
-	i = glGetUniformLocation(shader_program, "LIGHT_CNT");
-	glUniform1i(i, rt->lights_cnt);
-	i = glGetUniformLocation(shader_program, "SHAPE_CNT");
-	glUniform1i(i, rt->shapes_cnt);
-	i = glGetUniformLocation(shader_program, "inter.ray.origin");
-	glUniform3f(i, rt->cam.origin.x, rt->cam.origin.y, rt->cam.origin.z);
-	i = glGetUniformLocation(shader_program, "inter.ray.t_max");
-	glUniform1f(i, RAY_T_MAX);
-	i = glGetUniformLocation(shader_program, "inter.t");
-	glUniform1f(i, RAY_T_MAX);
+	i = glGetUniformLocation(shader_program, "render_type");
+	glUniform1i(i, 0);
+	i = glGetUniformLocation(shader_program, "CONE_COUNT");
+	glUniform1i(i, rt->cnt.cone);
+	i = glGetUniformLocation(shader_program, "CYLINDER_COUNT");
+	glUniform1i(i, rt->cnt.cylinder);
+	i = glGetUniformLocation(shader_program, "PLANE_COUNT");
+	glUniform1i(i, rt->cnt.plane);
+	i = glGetUniformLocation(shader_program, "SPHERE_COUNT");
+	glUniform1i(i, rt->cnt.sphere);
+	i = glGetUniformLocation(shader_program, "LIGHT_COUNT");
+	glUniform1i(i, rt->cnt.light);
 }
 
 static void	set_uniform_cam(t_cam *camera, GLuint shader_program)
 {
 	GLuint	i;
 
-	i = glGetUniformLocation(shader_program, "cam.h");
-	glUniform1d(i, camera->h);
-	i = glGetUniformLocation(shader_program, "cam.w");
-	glUniform1d(i, camera->w);
-	i = glGetUniformLocation(shader_program, "cam.origin");
-	glUniform3d(i, camera->origin.x, camera->origin.y, camera->origin.z);
-	i = glGetUniformLocation(shader_program, "cam.forward");
-	glUniform3d(i, camera->forward.x, camera->forward.y, camera->forward.z);
-	i = glGetUniformLocation(shader_program, "cam.up");
-	glUniform3d(i, camera->up.x, camera->up.y, camera->up.z);
-	i = glGetUniformLocation(shader_program, "cam.right");
-	glUniform3d(i, camera->right.x, camera->right.y, camera->right.z);
-}
-
-static void	set_uniform_light(t_light *light, int index, GLuint shader_program)
-{
-	GLuint	i;
-	char	*combine;
-
-	combine = combine_str_int_str("lights[", index, "].type");
-	i = glGetUniformLocation(shader_program, combine);
-	glUniform1i(i, light->type);
-	ft_strdel(&combine);
-	combine = combine_str_int_str("lights[", index, "].intensity");
-	i = glGetUniformLocation(shader_program, combine);
-	glUniform1d(i, light->intensity);
-	ft_strdel(&combine);
-	if (light->type == POINT)
-	{
-		combine = combine_str_int_str("lights[", index, "].position");
-		i = glGetUniformLocation(shader_program, combine);
-		glUniform3d(i, light->position.x, light->position.y, light->position.z);
-		ft_strdel(&combine);
-	}
+	i = glGetUniformLocation(shader_program, "camera.direction");
+	glUniform3f(i, camera->direction.x, camera->direction.y,
+		camera->direction.z);
+	i = glGetUniformLocation(shader_program, "camera.transform.position");
+	glUniform3f(i, camera->transform.position.x, camera->transform.position.y,
+		camera->transform.position.z);
+	i = glGetUniformLocation(shader_program, "camera.transform.rotation");
+	glUniform3f(i, camera->transform.rotation.x, camera->transform.rotation.y,
+		camera->transform.rotation.z);
 }
 
 void		set_settings(t_rt *rt, GLuint shader_program)
@@ -99,16 +84,17 @@ void		set_settings(t_rt *rt, GLuint shader_program)
 	set_uniform_cam(&rt->cam, shader_program);
 	light = rt->lights;
 	i = -1;
-	while (!light && ++i < MAX_CNT_LIGHTS)
+	while (light && ++i < MAX_CNT_LIGHTS)
 	{
 		set_uniform_light(light->light, i, shader_program);
 		light = light->next;
 	}
 	shape = rt->shapes;
 	i = -1;
-	while (!shape && ++i < MAX_CNT_SHAPES)
+	while (shape && ++i < MAX_CNT_SHAPES)
 	{
-		set_uniform_shape(shape, i, shader_program);
+		set_uniform_shape(shape, i, shader_program,
+			(!rt->marker || shape->marker));
 		shape = shape->next;
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/02 18:44:44 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/03 01:48:49 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/17 06:47:44 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ static void	middle_button(t_rt *rt, t_list_shape *shape)
 			tmp = tmp->next;
 		tmp->next = tmp->next->next;
 	}
-	del_shape(&shape);
-	draw(rt);
+	del_shape(&shape, &rt->cnt);
 }
 
 static void	left_middle_button(t_rt *rt, int button, int x, int y)
@@ -38,10 +37,10 @@ static void	left_middle_button(t_rt *rt, int button, int x, int y)
 	t_vec2			screen_coord;
 
 	screen_coord = v2_set((2.0 * x) / WIDTH - 1.0, (-2.0 * y) / HEIGHT + 1.0);
-	r.origin = rt->cam.origin;
+//	r.origin = rt->cam.origin;
 	r.t_max = RAY_T_MAX;
 	inter_new_ray(&inter, &r);
-	set_ray_direction(inter.ray, &screen_coord, &rt->cam);
+//	set_ray_direction(inter.ray, &screen_coord, &rt->cam);
 	if (shapeset_intersect(&inter, rt->shapes))
 	{
 		if (button == SCROLL_CLICK)
@@ -56,7 +55,7 @@ static void	left_middle_button(t_rt *rt, int button, int x, int y)
 			rt->marker->marker = FALSE;
 			rt->marker = inter.shape;
 		}
-		draw(rt);
+//		draw(rt);
 	}
 }
 
@@ -65,8 +64,8 @@ static void	scrolling(t_rt *rt, int button)
 	t_shape_type	type;
 	void			*shape;
 
-	type = rt->marker->shape;
-	shape = rt->marker->content;
+	type = rt->marker->type;
+	shape = rt->marker->shape;
 	if (button == 4)
 	{
 		if (type == SPHERE)
@@ -86,17 +85,17 @@ static void	scrolling(t_rt *rt, int button)
 		((t_cone*)shape)->angle -= 10;
 	else
 		return ;
-	draw(rt);
+//	draw(rt);
 }
 
-static void	set_shape_color(t_rt *rt, t_color *shape_color, int *pixel)
-{
-	*shape_color = (t_color){(*pixel & 0xFF0000) >> 16,
-							(*pixel & 0xFF00) >> 8,
-							*pixel & 0xFF};
-	rt->is_rgb = FALSE;
-	draw(rt);
-}
+//static void	set_shape_color(t_rt *rt, t_color *shape_color, int *pixel)
+//{
+//	*shape_color = (t_color){(*pixel & 0xFF0000) >> 16,
+//							(*pixel & 0xFF00) >> 8,
+//							*pixel & 0xFF};
+//	rt->flg.open_spectrum = FALSE;
+//	draw(rt);
+//}
 
 int			mouse_move(int x, int y, void *param)
 {
@@ -104,14 +103,16 @@ int			mouse_move(int x, int y, void *param)
 	int		pixel;
 
 	rt = (t_rt*)param;
-	if (!rt->is_move || !rt->marker || !rt->is_rgb ||
+	if (!rt->flg.hold_lmb_mlx || !rt->marker ||
+	//!rt->flg.open_spectrum ||
 			x < 0 || x >= 100 || y < 0 || y >= 100)
 		return (0);
-	pixel = *get_pixel(x, y, rt->rgb_spectrum);
+//	pixel = *get_pixel(x, y, rt->rgb_spectrum);
+	pixel = 0;
 	*get_color_from_list(rt->marker) = (t_color){(pixel & 0xFF0000) >> 16,
 												(pixel & 0xFF00) >> 8,
 												pixel & 0xFF};
-	draw(rt);
+//	draw(rt);
 	return (0);
 }
 
@@ -120,13 +121,13 @@ int			mouse_release(int button, int x, int y, void *param)
 	t_rt	*rt;
 
 	rt = (t_rt*)param;
-	if (!rt->is_move || button != 1)
+	if (!rt->flg.hold_lmb_mlx || button != 1)
 		return (0);
 	++x;
 	++y;
-	rt->is_move = FALSE;
-	rt->is_rgb = FALSE;
-	draw(rt);
+	rt->flg.hold_lmb_mlx = FALSE;
+//	rt->flg.open_spectrum = FALSE;
+//	draw(rt);
 	return (0);
 }
 
@@ -137,16 +138,18 @@ int			mouse_press(int button, int x, int y, void *param)
 	rt = (t_rt*)param;
 	if ((button != 1 && !rt->marker) && button != SCROLL_CLICK)
 		return (0);
-	if (button == 1 && rt->marker && rt->is_rgb &&
+	if (button == 1 && rt->marker &&
+	//rt->flg.open_spectrum &&
 			x >= 0 && x < 100 && y >= 0 && y < 100)
 	{
-		rt->is_move = TRUE;
+		rt->flg.hold_lmb_mlx = TRUE;
 		mouse_move(x, y, param);
 	}
-	else if (button == 1 && rt->marker && rt->is_rgb &&
-			x >= 0 && x < 100 && y >= 0 && y < 100)
-		set_shape_color(rt, get_color_from_list(rt->marker),
-						get_pixel(x, y, rt->rgb_spectrum));
+//	else if (button == 1 && rt->marker &&
+	//rt->flg.open_spectrum &&
+//			x >= 0 && x < 100 && y >= 0 && y < 100)
+//		set_shape_color(rt, get_color_from_list(rt->marker), 0);
+//						get_pixel(x, y, rt->mlx.rgb_spectrum));
 	else if (button == 1 || button == SCROLL_CLICK)
 		left_middle_button(rt, button, x, y);
 	else if (button == 4 || button == 5)

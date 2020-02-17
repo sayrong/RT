@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 15:57:10 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/09 13:02:45 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/16 20:48:48 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	white(t_color *color)
 	color->b = 255;
 }
 
-int		get_color(t_color *c, double light)
+int		get_color(t_color *c, float light)
 {
 	int	new_red;
 	int	new_green;
@@ -33,14 +33,14 @@ int		get_color(t_color *c, double light)
 
 t_color	*get_color_from_list(t_list_shape *list)
 {
-	if (list->shape == SPHERE)
-		return (&(((t_sphere*)list->content)->color));
-	else if (list->shape == PLANE)
-		return (&(((t_plane*)list->content)->color));
-	else if (list->shape == CONE)
-		return (&(((t_cone*)list->content)->color));
-	else if (list->shape == CYLINDER)
-		return (&(((t_cylinder*)list->content)->color));
+	if (list->type == SPHERE)
+		return (&(((t_sphere*)list->shape)->material.color));
+	else if (list->type == PLANE)
+		return (&(((t_plane*)list->shape)->material.color));
+	else if (list->type == CONE)
+		return (&(((t_cone*)list->shape)->material.color));
+	else if (list->type == CYLINDER)
+		return (&(((t_cylinder*)list->shape)->material.color));
 	return (NULL);
 }
 

@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 17:17:56 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/15 20:47:55 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/16 20:50:05 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,25 +32,16 @@ static void	check_mistakes(t_rt *rt)
 
 static void	parse_cam(t_rt *rt, char **split, int line_num)
 {
-	t_vec3	origin;
-	t_vec3	target;
-
 	if (rt->flg.cam_flg)
 		parse_error("Should be only one camera on the scene", line_num);
 	rt->flg.cam_flg = TRUE;
 	if (!split[1] || !split[2] || split[3])
 		parse_error("Camera should have two parameters", line_num);
-	if (!str_to_v3(&origin, split[1]))
+	if (!str_to_v3(&rt->cam.transform.position, split[1]))
 		parse_error("Invalid param: position vector of the camera", line_num);
-	if (!str_to_v3(&target, split[2]))
-		parse_error("Invalid param: target point of the camera", line_num);
-	if (origin.x == target.x && origin.y == target.y && origin.z == target.z)
-		parse_error("Position and target must have different values",
-					line_num);
-	if (v3_length(v3_sub(origin, target)) <= 1)
-		parse_error("Lenght between position and target must be greater than 1",
-					line_num);
-	rt->cam = camera_new(origin, target);
+	if (!str_to_v3(&rt->cam.transform.rotation, split[2]))
+		parse_error("Invalid param: rotation vector of the camera", line_num);
+	rt->cam.direction = (t_vec3){0.0f, 0.0f, 1.0f};
 }
 
 static void	parse_split(char **split, t_rt *rt, int line_num)
@@ -68,8 +59,8 @@ static void	parse_split(char **split, t_rt *rt, int line_num)
 		parse_ambient(rt, split, line_num);
 	else if (ft_strequ(split[0], "point"))
 		parse_point(rt, split, line_num);
-//	else if (ft_strequ(split[0], "direction"))
-//		TODO parse_direction();
+	else if (ft_strequ(split[0], "direction"))
+		parse_direction(rt, split, line_num);
 	else if (ft_strequ(split[0], "plane") || ft_strequ(split[0], "sphere") ||
 			ft_strequ(split[0], "cylinder") || ft_strequ(split[0], "cone"))
 		parse_shape(rt, split, line_num);

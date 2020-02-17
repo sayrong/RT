@@ -1,28 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   sphere_init.c                                      :+:      :+:    :+:   */
+/*   sphere.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/30 00:05:54 by cschoen           #+#    #+#             */
-/*   Updated: 2019/10/13 18:07:57 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/17 06:05:21 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-t_sphere	*sphere_new(t_vec3 center, double radius, int spec)
+t_sphere	*sphere_new(t_transform *transform, t_material *material,
+						float radius)
 {
 	t_sphere	*new_sphere;
 
 	if (!(new_sphere = (t_sphere*)malloc(sizeof(t_sphere))))
 		p_error("malloc t_sphere");
-	new_sphere->center = center;
+	new_sphere->type = SPHERE;
+	new_sphere->transform.position = transform->position;
 	new_sphere->radius = radius;
-	new_sphere->specular = spec;
-	new_sphere->shape = SPHERE;
-	white(&(new_sphere->color));
+	new_sphere->material.specular = material->specular;
+	new_sphere->material.color = material->color;
 	return (new_sphere);
 }
 
@@ -34,11 +35,11 @@ _Bool		sphere_intersect(t_inter *inter, t_list_shape *shape_in_list)
 	double		t[2];
 	t_sphere	*sphere;
 
-	(!inter || !inter->ray || !shape_in_list) ? p_error("null") : 0;
-	sphere = (t_sphere*)shape_in_list->content;
-	new_origin = v3_sub(inter->ray->origin, sphere->center);
-	coef[0] = v3_length_sq(inter->ray->direction);
-	coef[1] = 2.0 * v3_dot(inter->ray->direction, new_origin);
+	(!inter || !shape_in_list) ? p_error("null") : 0;
+	sphere = (t_sphere*)shape_in_list->shape;
+	new_origin = v3_sub(inter->ray.origin, sphere->transform.position);
+	coef[0] = v3_length_sq(inter->ray.direction);
+	coef[1] = 2.0 * v3_dot(inter->ray.direction, new_origin);
 	coef[2] = v3_length_sq(new_origin) - sphere->radius * sphere->radius;
 	discriminant = coef[1] * coef[1] - 4.0 * coef[0] * coef[2];
 	if (discriminant < 0.0)
@@ -50,11 +51,11 @@ _Bool		sphere_intersect(t_inter *inter, t_list_shape *shape_in_list)
 	return (FALSE);
 }
 
-t_vec3		get_sphere_normal(t_sphere *sphere, t_vec3 hit_point)
-{
-	t_vec3	normal;
+// t_vec3		get_sphere_normal(t_sphere *sphere, t_vec3 hit_point)
+// {
+// 	t_vec3	normal;
 
-	normal = v3_sub(hit_point, sphere->center);
-	normal = v3_norm(normal);
-	return (normal);
-}
+// 	normal = v3_sub(hit_point, sphere->center);
+// 	normal = v3_norm(normal);
+// 	return (normal);
+// }

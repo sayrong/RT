@@ -6,21 +6,21 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 18:47:50 by cschoen           #+#    #+#             */
-/*   Updated: 2019/10/13 13:03:50 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/16 13:16:09 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-double		str_to_double(char *str)
+float		str_to_float(char *str)
 {
-	double	res;
-	double	tmp;
+	float	res;
+	float	tmp;
 	char	*s;
 	int		sign;
 
 	sign = (*str == '-') ? -1 : 1;
-	res = (double)ft_atoi(str);
+	res = (float)ft_atoi(str);
 	if ((s = ft_strchr(str, '.')))
 	{
 		*str == '-' ? ++str : 0;
@@ -28,11 +28,11 @@ double		str_to_double(char *str)
 			str++;
 		if (*str == ',')
 			return (res);
-		*str == '-' ? error("Incorrect value(minus sign inside double)") : 0;
+		*str == '-' ? error("Incorrect value(minus sign inside float)") : 0;
 		if (str == s++)
 		{
-			(*s >= ',' && *s <= '.') ? error("Incorrect value of double") : 0;
-			tmp = (double)ft_atoi(s);
+			(*s >= ',' && *s <= '.') ? error("Incorrect value of float") : 0;
+			tmp = (float)ft_atoi(s);
 			while (ft_isdigit(*s++))
 				tmp /= 10;
 			res += tmp * sign;
@@ -72,9 +72,9 @@ int			str_to_v3(t_vec3 *vec, char *str)
 		len = (i != 2) ? (size_t)(tmp - str) : ft_strlen(str);
 		if (len > 9 || len == 0 || (len == 1 && *str == '.'))
 			return (0);
-		i == 0 ? vec->x = str_to_double(str) : 0;
-		i == 1 ? vec->y = str_to_double(str) : 0;
-		i == 2 ? vec->z = str_to_double(str) : 0;
+		i == 0 ? vec->x = str_to_float(str) : 0;
+		i == 1 ? vec->y = str_to_float(str) : 0;
+		i == 2 ? vec->z = str_to_float(str) : 0;
 		str = ft_strchr(str, ',');
 		i != 2 ? ++str : 0;
 		if (i == 2 && str)

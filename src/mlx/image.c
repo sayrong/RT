@@ -6,13 +6,13 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/15 14:03:56 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/15 14:07:50 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/17 00:14:54 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-t_img	*img_new(int width, int height, t_rt *rt)
+t_img	*new_img(int width, int height, t_rt *rt)
 {
 	t_img	*new_img;
 

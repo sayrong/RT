@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   gl.c                                               :+:      :+:    :+:   */
+/*   init_ogl.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/09 11:56:32 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/09 18:04:44 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/16 23:25:21 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,10 @@
 static void	create_window(t_rt *rt)
 {
 	glfwInit();
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 	rt->gl.window = glfwCreateWindow(WIDTH, HEIGHT, "RT", NULL, NULL);
 	if (rt->gl.window == NULL)
@@ -92,12 +92,12 @@ static void	put_data_to_gpu(t_rt *rt)
 	glBindVertexArray(0);
 }
 
-void		gl_init(t_rt *rt)
+void		init_ogl(t_rt *rt)
 {
 	create_window(rt);
 	glfwSetKeyCallback(rt->gl.window,
 			(void (*)(struct GLFWwindow *, int, int, int, int))callback_key);
-	glfwSetCursorPosCallback(rt->gl.window, callback_cursor_position);
+//	glfwSetCursorPosCallback(rt->gl.window, callback_cursor_position);
 	glfwSetMouseButtonCallback(rt->gl.window, callback_mouse_button);
 	glewExperimental = GL_TRUE;
 	if (glewInit() != GLEW_OK)

@@ -1,24 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw.c                                             :+:      :+:    :+:   */
+/*   run.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/09 13:21:52 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/09 19:06:09 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/17 03:12:30 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-void	draw(t_rt *rt)
+void	run(t_rt *rt)
 {
 	glfwPollEvents();
-	if (!rt->flg.is_move)
+	if (!rt->flg.run && !rt->flg.hold_rmb_ogl)
 		return ;
-	if (rt->marker == NULL)
-		rt->flg.is_rgb = FALSE;
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glUseProgram(rt->gl.shader_program);
@@ -28,9 +26,5 @@ void	draw(t_rt *rt)
 	glBindVertexArray(0);
 	glfwSwapBuffers(rt->gl.window);
 	ft_putendl("ad");
-	if (rt->flg.is_rgb)
-	{
-		//put spectrum
-	}
-	rt->flg.is_move = FALSE;
+	rt->flg.run = FALSE;
 }

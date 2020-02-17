@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 17:23:24 by cschoen           #+#    #+#             */
-/*   Updated: 2019/10/12 20:47:50 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/16 13:02:53 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ int	is_valid_v3(char *str)
 	{
 		if (str[i] < ',' && str[i] > '.' && !ft_isdigit(str[i]))
 			return (0);
-		str[i] == '.' && dot == TRUE ? error("Incorrect value of double") : 0;
+		str[i] == '.' && dot == TRUE ? error("Incorrect value of float") : 0;
 		str[i] == '.' ? dot = TRUE : 0;
-		str[i] == '-' && minus == TRUE ? error("Incorrect value of double") : 0;
-		str[i] == '-' && dot == TRUE ? error("Incorrect value of double") : 0;
+		str[i] == '-' && minus == TRUE ? error("Incorrect value of float") : 0;
+		str[i] == '-' && dot == TRUE ? error("Incorrect value of float") : 0;
 		str[i] == '-' ? minus = TRUE : 0;
 		str[i] == ',' ? dot = FALSE : 0;
 		str[i] == ',' ? minus = FALSE : 0;
@@ -52,7 +52,7 @@ int	is_valid_v3(char *str)
 	return (1);
 }
 
-int	is_valid_double(char *str)
+int	is_valid_float(char *str)
 {
 	int		i;
 	_Bool	dot;

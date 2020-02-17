@@ -6,7 +6,7 @@
 #    By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/07 02:04:41 by cschoen           #+#    #+#              #
-#    Updated: 2020/02/15 13:38:41 by cschoen          ###   ########.fr        #
+#    Updated: 2020/02/17 02:16:08 by cschoen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,6 +29,20 @@ INCDIR = ./inc/
 OBJDIR = ./obj/
 BINDIR = ./bin/
 
+#	SOURCE DIRECTORIES
+SDMLX = $(SRCDIR)mlx/
+SDOGL = $(SRCDIR)ogl/
+SDPARSER = $(SRCDIR)parser/
+SDRT = $(SRCDIR)rt/
+SDSHAPES = $(SRCDIR)shapes/
+
+#	OBJECT DIRECTORIES
+ODMLX = $(OBJDIR)mlx/
+ODOGL = $(OBJDIR)ogl/
+ODPARSER = $(OBJDIR)parser/
+ODRT = $(OBJDIR)rt/
+ODSHAPES = $(OBJDIR)shapes/
+
 #	SHADERS SUBDIRECTORIES
 SHRSRCDIR = $(SHRDIR)src/
 SHROBJDIR = $(SHRDIR)obj/
@@ -49,12 +63,21 @@ LIBHEAD = $(LFTINC)libft.h $(LFTINC)ftprintf.h $(VECINC)libvec.h
 INCNAME = $(INCDIR)rt.h $(INCDIR)macoskeys.h
 
 #	MAIN SOURCES
-SRCNAME = main.c error.c validator.c gl.c draw.c cleaner.c \
-		parser.c parse_functions.c parse_light.c parse_shape.c \
+SDMLX_SRC = deal_key.c draw_ui.c hook.c image.c init_mlx.c \
+		mouse_click.c rgb_spectrum.c mlx_run.c
+
+SDOGL_SRC = init_ogl.c run.c \
 		callback_key.c callback_mouse_button.c callback_cursor_position.c \
-		camera.c plane.c sphere.c cone.c cylinder.c list.c \
-		uniform.c uniform_shape.c \
-		intersection.c shapeset_init.c rgb_spectrum.c color.c
+		uniform.c uniform_light.c uniform_shape.c uniform_plane.c \
+		uniform_sphere.c uniform_cone.c uniform_cylinder.c
+
+SDPARSER_SRC = validator.c parser.c parse_functions.c \
+		parse_light.c parse_shape.c
+
+SDRT_SRC = main.c error.c usage.c cleaner.c camera.c anti_aliasing.c list.c \
+		ray_trace.c color.c intersection.c shapeset_init.c
+
+SDSHAPES_SRC = cone.c cylinder.c plane.c sphere.c
 
 #	LIBFT SOURCES
 LFTSRCNAME = ft_strlen.c ft_strlcat.c ft_memcmp.c ft_atoi.c ft_isascii.c \
@@ -92,8 +115,16 @@ SHRNAME = rt.glsl shape_intersection.glsl
 LFTSRC = $(addprefix $(LFTDIR)src/, $(LFTSRCNAME))
 PFTSRC = $(addprefix $(LFTDIR)src/libftprintf/, $(PFTSRCNAME))
 VECSRC = $(addprefix $(VECDIR)src/, $(VECSRCNAME))
-SRC = $(addprefix $(SRCDIR), $(SRCNAME))
-OBJ = $(addprefix $(OBJDIR), $(SRCNAME:.c=.o))
+PATH_RT_SRC = $(addprefix $(SDRT), $(SDRT_SRC))
+PATH_RT_OBJ = $(addprefix $(ODRT), $(SDRT_SRC:.c=.o))
+PATH_PARSER_SRC = $(addprefix $(SDPARSER), $(SDPARSER_SRC))
+PATH_PARSER_OBJ = $(addprefix $(ODPARSER), $(SDPARSER_SRC:.c=.o))
+PATH_SHAPES_SRC = $(addprefix $(SDSHAPES), $(SDSHAPES_SRC))
+PATH_SHAPES_OBJ = $(addprefix $(ODSHAPES), $(SDSHAPES_SRC:.c=.o))
+PATH_MLX_SRC = $(addprefix $(SDMLX), $(SDMLX_SRC))
+PATH_MLX_OBJ = $(addprefix $(ODMLX), $(SDMLX_SRC:.c=.o))
+PATH_OGL_SRC = $(addprefix $(SDOGL), $(SDOGL_SRC))
+PATH_OGL_OBJ = $(addprefix $(ODOGL), $(SDOGL_SRC:.c=.o))
 
 #	SHADER PATH
 SHRSRC = $(addprefix $(SHRSRCDIR), $(SHRNAME))
@@ -124,14 +155,14 @@ NONE = \033[0m
 
 all: $(BINNAME) $(SHROBJDIR) $(SHROBJ)
 
-$(BINNAME): $(OBJDIR) $(OBJ) $(LFTSRC) $(PFTSRC) $(VECSRC) $(INCNAME) $(LIBHEAD)
+$(BINNAME): $(OBJDIR) $(ODMLX) $(ODOGL) $(ODPARSER) $(ODRT) $(ODSHAPES) $(PATH_RT_OBJ) $(PATH_PARSER_OBJ) $(PATH_SHAPES_OBJ) $(PATH_MLX_OBJ) $(PATH_OGL_OBJ) $(LFTSRC) $(PFTSRC) $(VECSRC) $(INCNAME) $(LIBHEAD)
 	@$(MAKE) -C $(LFTDIR)
 	@printf "$(PURPLE)RT:\t$(YELLOW)%-35s$(GREEN)[done]$(NONE)\n" $(LIB_FT)
 	@$(MAKE) -C $(VECDIR)
 	@printf "$(PURPLE)RT:\t$(YELLOW)%-35s$(GREEN)[done]$(NONE)\n" $(LIB_VEC)
 	@mkdir -p $(BINDIR)
 	@printf "$(PURPLE)RT:\t$(BLUE)%-35s$(GREEN)[done]$(NONE)\n" $(BINDIR)
-	@$(GCC) $(OGLFLAG) $(MLXFLAG) -o $(BINNAME) $(INC) $(LFTINIT) $(VECINIT) $(OBJ) $(OGLINIT) $(MLXINIT)
+	@$(GCC) $(OGLFLAG) $(MLXFLAG) -o $(BINNAME) $(INC) $(LFTINIT) $(VECINIT) $(PATH_RT_OBJ) $(PATH_PARSER_OBJ) $(PATH_SHAPES_OBJ) $(PATH_MLX_OBJ) $(PATH_OGL_OBJ) $(OGLINIT) $(MLXINIT)
 	@printf "$(PURPLE)RT:\t$(YELLOW)%-35s$(GREEN)[done]$(NONE)\n" $@
 
 $(LIB_FT):
@@ -146,7 +177,43 @@ $(OBJDIR):
 	@mkdir -p $(OBJDIR)
 	@printf "$(PURPLE)RT:\t$(BLUE)%-35s$(GREEN)[done]$(NONE)\n" $@
 
-$(OBJDIR)%.o: $(SRCDIR)%.c $(INCNAME)
+$(ODMLX):
+	@mkdir -p $(ODMLX)
+	@printf "$(PURPLE)RT:\t$(BLUE)%-35s$(GREEN)[done]$(NONE)\n" $@
+
+$(ODOGL):
+	@mkdir -p $(ODOGL)
+	@printf "$(PURPLE)RT:\t$(BLUE)%-35s$(GREEN)[done]$(NONE)\n" $@
+
+$(ODPARSER):
+	@mkdir -p $(ODPARSER)
+	@printf "$(PURPLE)RT:\t$(BLUE)%-35s$(GREEN)[done]$(NONE)\n" $@
+
+$(ODRT):
+	@mkdir -p $(ODRT)
+	@printf "$(PURPLE)RT:\t$(BLUE)%-35s$(GREEN)[done]$(NONE)\n" $@
+
+$(ODSHAPES):
+	@mkdir -p $(ODSHAPES)
+	@printf "$(PURPLE)RT:\t$(BLUE)%-35s$(GREEN)[done]$(NONE)\n" $@
+
+$(ODRT)%.o: $(SDRT)%.c $(INCNAME)
+	@$(GCC) -c $(INC) $< -o $@
+	@printf "$(PURPLE)RT:\t$(CYAN)%-35s$(GREEN)[done]$(NONE)\n" $@
+
+$(ODPARSER)%.o: $(SDPARSER)%.c $(INCNAME)
+	@$(GCC) -c $(INC) $< -o $@
+	@printf "$(PURPLE)RT:\t$(CYAN)%-35s$(GREEN)[done]$(NONE)\n" $@
+
+$(ODSHAPES)%.o: $(SDSHAPES)%.c $(INCNAME)
+	@$(GCC) -c $(INC) $< -o $@
+	@printf "$(PURPLE)RT:\t$(CYAN)%-35s$(GREEN)[done]$(NONE)\n" $@
+
+$(ODMLX)%.o: $(SDMLX)%.c $(INCNAME)
+	@$(GCC) -c $(INC) $< -o $@
+	@printf "$(PURPLE)RT:\t$(CYAN)%-35s$(GREEN)[done]$(NONE)\n" $@
+
+$(ODOGL)%.o: $(SDOGL)%.c $(INCNAME)
 	@$(GCC) -c $(INC) $< -o $@
 	@printf "$(PURPLE)RT:\t$(CYAN)%-35s$(GREEN)[done]$(NONE)\n" $@
 

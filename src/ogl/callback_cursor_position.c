@@ -6,13 +6,13 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/09 12:03:53 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/09 18:07:37 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/16 21:03:07 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "rt.h"
 
-void	callback_cursor_position(GLFWwindow *window, double xpos, double ypos)
+void	callback_cursor_position(GLFWwindow *window, float xpos, float ypos)
 {
 	if (window)
 	{

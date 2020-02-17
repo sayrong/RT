@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/08/31 13:28:17 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/02 22:15:43 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/02/17 02:59:55 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # define Q_KEY 12
 # define E_KEY 14
 # define P_KEY 35
+# define U_KEY 32
 # define M_KEY 46
 # define C_KEY 8
 # define O_KEY 31
