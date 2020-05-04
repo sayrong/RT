@@ -6,7 +6,7 @@
 #    By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/07 02:04:41 by cschoen           #+#    #+#              #
-#    Updated: 2020/02/03 23:31:02 by cschoen          ###   ########.fr        #
+#    Updated: 2020/02/15 13:35:20 by cschoen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,7 +75,7 @@ else
 	MLX = $(MLXINIT) -framework OpenGL -framework AppKit
 endif
 
-WFLAGS = -Wall -Wextra -Werror -g
+WFLAGS = -Wall -Wextra -Werror -g -O2
 
 RED = \033[31m
 GREEN = \033[32m

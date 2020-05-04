@@ -6,7 +6,7 @@
 /*   By: cschoen <cschoen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/09/28 20:32:31 by cschoen           #+#    #+#             */
-/*   Updated: 2020/02/03 21:39:28 by cschoen          ###   ########.fr       */
+/*   Updated: 2020/04/11 16:51:30 by cschoen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,7 @@ int			main(int argc, char **argv)
 	parse_line = 0;
 	if (argc != 2)
 		usage(argv[0]);
+	ft_putendl(argv[0]);
 	rt_init(&rt, 1);
 	parser(argv[1], &rt, fd, parse_line);
 	rt_init(&rt, 2);
